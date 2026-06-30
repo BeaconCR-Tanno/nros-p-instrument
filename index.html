@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NROS-P — Pediatric Neuro Outcome Scale</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0A0F1E;
+  --text:#F0F4FF;
+  --text-muted:#94A3B8;
+  --accent:#22C55E;
+  --border:#1E2A4A;
+  --card:#111827;
+  --dev-border:#0EA5E9;
+  --dev-bg:rgba(14,165,233,0.10);
+  --dev-text:#BAE6FD;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.container{max-width:640px;width:100%;text-align:center;}
+.dev-badge{background:var(--dev-bg);border:1px solid var(--dev-border);color:var(--dev-text);border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;letter-spacing:0.05em;display:inline-block;margin-bottom:32px;}
+.logo{font-size:48px;font-weight:900;letter-spacing:-1px;margin-bottom:8px;}
+.logo span{color:var(--accent);}
+.ver{font-size:13px;color:var(--text-muted);margin-bottom:32px;font-weight:500;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:24px;text-align:left;}
+.card h2{font-size:18px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.card p{font-size:15px;line-height:1.7;color:var(--text-muted);}
+.subscales{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;}
+.sub{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--accent);font-weight:600;}
+.status-card{background:var(--dev-bg);border:1px solid var(--dev-border);border-radius:16px;padding:24px;}
+.status-card h3{font-size:15px;font-weight:700;color:var(--dev-text);margin-bottom:12px;}
+.status-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(14,165,233,0.15);font-size:14px;}
+.status-row:last-child{border-bottom:none;}
+.status-row .label{color:var(--text-muted);}
+.status-row .val{color:var(--dev-text);font-weight:600;}
+.footer{margin-top:32px;font-size:13px;color:var(--text-muted);line-height:1.6;}
+.footer a{color:var(--accent);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="dev-badge">🔧 Dev Preview — Instrument Build In Progress</div>
+
+  <div class="logo">NR<span>O</span>S-P</div>
+  <div class="ver">NeuroRecovery Outcome Scale: Pediatric | v1.0-dev | Beacon Clinical Research</div>
+
+  <div class="card">
+    <h2>PANS / PANDAS Caregiver Outcome Instrument</h2>
+    <p>NROS-P is a caregiver-reported outcome tool for tracking symptom burden and treatment response in children with PANS, PANDAS, and related inflammatory brain disorders. Built on the validated PTEC framework (Vyshedskiy et al., 2025 — 101 items, Cronbach's α = 0.96) with BeaconCR longitudinal research enhancements.</p>
+    <div class="subscales">
+      <div class="sub">I. Behavior / Mood</div>
+      <div class="sub">II. OCD</div>
+      <div class="sub">III. Anxiety</div>
+      <div class="sub">IV. Food Intake</div>
+      <div class="sub">V. Tics</div>
+      <div class="sub">VI. Cognitive / Dev</div>
+      <div class="sub">VII. Sensory</div>
+      <div class="sub">VIII. Other</div>
+      <div class="sub">IX. Sleep</div>
+      <div class="sub">X. Health</div>
+    </div>
+  </div>
+
+  <div class="status-card">
+    <h3>Build Status</h3>
+    <div class="status-row"><span class="label">Instrument</span><span class="val">Building — 101 items / 10 subscales</span></div>
+    <div class="status-row"><span class="label">Registration gateway</span><span class="val">Pending</span></div>
+    <div class="status-row"><span class="label">Flare status gate</span><span class="val">Pending</span></div>
+    <div class="status-row"><span class="label">Safety flags + 988 prompt</span><span class="val">Pending</span></div>
+    <div class="status-row"><span class="label">Caregiver burden co-scale</span><span class="val">Pending</span></div>
+    <div class="status-row"><span class="label">Admin notification portal</span><span class="val">Pending</span></div>
+    <div class="status-row"><span class="label">Backend / HIPAA hardening</span><span class="val">Architecture complete — build queued</span></div>
+    <div class="status-row"><span class="label">Repo</span><span class="val">BeaconCR-Tanno/nros-p-instrument</span></div>
+    <div class="status-row"><span class="label">Target URL</span><span class="val">nros-p-dev.beaconcr.com</span></div>
+  </div>
+
+  <div class="footer">
+    PTEC items © 2022–2026 Neuroimmune Foundation — used with attribution.<br>
+    NROS-P enhancements © 2026 <a href="https://beaconcr.com">Beacon Clinical Research</a><br>
+    <a href="https://neuroimmune.org/PTEC">neuroimmune.org/PTEC</a> &nbsp;|&nbsp;
+    <a href="https://github.com/BeaconCR-Tanno/nros-p-instrument">GitHub</a>
+  </div>
+
+</div>
+</body>
+</html>
