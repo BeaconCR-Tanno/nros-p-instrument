@@ -5,6 +5,26 @@ Format: [Version] — Date — Summary
 
 ---
 
+## [v1.1.6-dev] — 2026-07-02
+
+### Added — Dev Log Modal + Feedback Boxes
+- **Dev log modal:** Clicking `v1.1.6-dev` chip in header opens a bottom-sheet modal with:
+  - BeaconCR mission statement (why PRO instruments matter, PTEC foundation)
+  - Full development history (v1.0 → current, changelog entries)
+  - Contact CTA: `admin@beaconcr.com` + `beaconcr.com`
+  - "Designed in America 🇺🇸" footer inside modal
+  - Closes on X button or tap-outside
+- **Skip reason text box** (conditional): shown on review page only if caregiver skipped ≥1 question. Asks for optional context (e.g. "too young", "didn't apply"). Autosaves to localStorage, included in session JSON export.
+- **Suggestion text box**: shown on every review page. Open-ended — caregivers can suggest questions or give feedback. Feeds directly into session data for clinical team review.
+- Both text boxes wired to `buildLog()` → `skipReason` and `suggestion` fields in session JSON.
+
+### Infrastructure
+- Commit: `a4ba3a1` — main branch
+- Deploy: `https://nros-p-dev.beaconcr.com` — v1.1.6-dev confirmed live
+- Syntax: `node --check` clean, 45,402 chars JS
+
+---
+
 ## [v1.1.4-dev] — 2026-07-02
 
 ### Changed — Header & Branding
