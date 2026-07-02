@@ -3,86 +3,933 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>NROS-P — Pediatric Neuro Outcome Scale</title>
+<title>NROS-P — Pediatric Neuro Outcome Scale | Beacon Clinical Research</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --bg:#0A0F1E;
+  --bg:#0A0E1D;
+  --bg2:#0F1729;
+  --bg3:#141E35;
   --text:#F0F4FF;
   --text-muted:#94A3B8;
-  --accent:#22C55E;
-  --border:#1E2A4A;
-  --card:#111827;
-  --dev-border:#0EA5E9;
+  --text-dim:#64748B;
+  --accent:#00D4D4;
+  --accent-hover:#00AEAE;
+  --accent-dim:rgba(0,212,212,0.12);
+  --red:#B22234;
+  --white:#FFFFFF;
+  --blue:#3C3B6E;
+  --border:#1A2744;
+  --border-bright:#253660;
+  --card:#0F1729;
+  --warn-bg:rgba(124,58,237,0.12);
+  --warn-border:#7C3AED;
+  --crisis-bg:rgba(220,38,38,0.12);
+  --crisis-border:#DC2626;
   --dev-bg:rgba(14,165,233,0.10);
+  --dev-border:#0EA5E9;
   --dev-text:#BAE6FD;
+  --success:#22C55E;
+  --amber:#F59E0B;
 }
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
-.container{max-width:640px;width:100%;text-align:center;}
-.dev-badge{background:var(--dev-bg);border:1px solid var(--dev-border);color:var(--dev-text);border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;letter-spacing:0.05em;display:inline-block;margin-bottom:32px;}
-.logo{font-size:48px;font-weight:900;letter-spacing:-1px;margin-bottom:8px;}
-.logo span{color:var(--accent);}
-.ver{font-size:13px;color:var(--text-muted);margin-bottom:32px;font-weight:500;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:24px;text-align:left;}
-.card h2{font-size:18px;font-weight:700;margin-bottom:12px;color:var(--text);}
-.card p{font-size:15px;line-height:1.7;color:var(--text-muted);}
-.subscales{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;}
-.sub{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--accent);font-weight:600;}
-.status-card{background:var(--dev-bg);border:1px solid var(--dev-border);border-radius:16px;padding:24px;}
-.status-card h3{font-size:15px;font-weight:700;color:var(--dev-text);margin-bottom:12px;}
-.status-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(14,165,233,0.15);font-size:14px;}
-.status-row:last-child{border-bottom:none;}
-.status-row .label{color:var(--text-muted);}
-.status-row .val{color:var(--dev-text);font-weight:600;}
-.footer{margin-top:32px;font-size:13px;color:var(--text-muted);line-height:1.6;}
-.footer a{color:var(--accent);text-decoration:none;}
+html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;}
+/* ── LAYOUT ── */
+#app{min-height:100vh;display:flex;flex-direction:column;}
+.sticky-header{position:sticky;top:0;z-index:100;background:rgba(10,14,29,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+.header-brand{display:flex;align-items:center;gap:10px;}
+.header-logo-text{font-size:18px;font-weight:900;letter-spacing:1px;}
+.logo-n{color:var(--red);}
+.logo-r{color:var(--white);}
+.logo-o{color:var(--blue);}
+.logo-s{color:var(--red);}
+.logo-dash{color:var(--text-muted);}
+.logo-p{color:var(--accent);}
+.flag-inline{font-size:16px;margin-left:4px;}
+.ver-chip{font-size:11px;font-weight:700;background:var(--dev-bg);border:1px solid var(--dev-border);color:var(--dev-text);border-radius:20px;padding:3px 10px;letter-spacing:0.05em;}
+.progress-bar-wrap{flex:1;margin:0 20px;max-width:300px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-hover));border-radius:2px;transition:width 0.4s ease;}
+.progress-label{font-size:11px;color:var(--text-dim);text-align:right;margin-top:4px;}
+/* ── SCREENS ── */
+.screen{flex:1;padding:24px 20px 40px;max-width:680px;width:100%;margin:0 auto;}
+/* ── LANDING ── */
+.landing-hero{text-align:center;padding:40px 0 32px;}
+.beacon-logo-svg{margin:0 auto 24px;display:block;}
+.nros-p-title{font-size:52px;font-weight:900;letter-spacing:2px;line-height:1;margin-bottom:6px;}
+.nros-p-sub{font-size:15px;color:var(--text-muted);letter-spacing:0.08em;font-weight:600;text-transform:uppercase;margin-bottom:32px;}
+.usa-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(178,34,52,0.1);border:1px solid rgba(178,34,52,0.3);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:700;color:#F87171;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:32px;}
+.dev-notice{background:var(--dev-bg);border:1px solid var(--dev-border);border-radius:12px;padding:14px 18px;margin-bottom:28px;font-size:13px;color:var(--dev-text);line-height:1.6;}
+.landing-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px;text-align:left;}
+.landing-card h3{font-size:16px;font-weight:700;margin-bottom:10px;color:var(--text);}
+.landing-card p{font-size:14px;color:var(--text-muted);line-height:1.7;}
+.subscale-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;}
+.subscale-chip{background:var(--accent-dim);border:1px solid rgba(0,212,212,0.25);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;color:var(--accent);}
+.attribution{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:24px;font-size:12px;color:var(--text-dim);line-height:1.7;}
+.attribution a{color:var(--accent);text-decoration:none;}
+.btn-primary{width:100%;padding:18px;background:var(--accent);color:#0A0E1D;border:none;border-radius:12px;font-size:17px;font-weight:800;cursor:pointer;letter-spacing:0.03em;transition:background 0.2s,transform 0.1s;}
+.btn-primary:hover{background:var(--accent-hover);}
+.btn-primary:active{transform:scale(0.99);}
+.btn-secondary{width:100%;padding:14px;background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;margin-top:12px;transition:border-color 0.2s,color 0.2s;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+/* ── REGISTRATION ── */
+.reg-title{font-size:26px;font-weight:800;margin-bottom:6px;}
+.reg-sub{font-size:14px;color:var(--text-muted);margin-bottom:28px;line-height:1.6;}
+.form-section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;}
+.form-section-title{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:18px;}
+.form-row{margin-bottom:18px;}
+.form-row:last-child{margin-bottom:0;}
+.form-label{font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px;display:block;}
+.form-input,.form-select{width:100%;background:var(--bg3);border:1px solid var(--border-bright);border-radius:10px;padding:14px 16px;color:var(--text);font-size:15px;font-family:'Inter',sans-serif;transition:border-color 0.2s;}
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--accent);}
+.form-select option{background:var(--bg2);}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.consent-row{display:flex;align-items:flex-start;gap:14px;padding:16px;background:var(--bg3);border:1px solid var(--border-bright);border-radius:10px;cursor:pointer;}
+.consent-check{width:22px;height:22px;min-width:22px;border:2px solid var(--border-bright);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;margin-top:1px;}
+.consent-check.checked{background:var(--accent);border-color:var(--accent);}
+.consent-check.checked::after{content:'✓';color:#0A0E1D;font-size:14px;font-weight:900;}
+.consent-text{font-size:13px;color:var(--text-muted);line-height:1.7;}
+.reg-error{color:#F87171;font-size:13px;margin-top:12px;padding:10px 14px;background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:8px;display:none;}
+/* ── FLARE GATE ── */
+.flare-title{font-size:24px;font-weight:800;margin-bottom:8px;}
+.flare-sub{font-size:14px;color:var(--text-muted);margin-bottom:28px;line-height:1.6;}
+.flare-options{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.flare-option{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:18px 20px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:16px;}
+.flare-option:hover{border-color:var(--accent);background:var(--accent-dim);}
+.flare-option.selected{border-color:var(--accent);background:var(--accent-dim);}
+.flare-option-icon{font-size:28px;}
+.flare-option-label{font-size:16px;font-weight:700;}
+.flare-option-desc{font-size:13px;color:var(--text-muted);margin-top:3px;}
+.trigger-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px;}
+.trigger-label{font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:12px;display:block;}
+/* ── SECTION TRANSITION ── */
+.sec-transition{text-align:center;padding:20px 0;}
+.sec-num-badge{display:inline-block;background:var(--accent-dim);border:1px solid rgba(0,212,212,0.3);color:var(--accent);font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border-radius:20px;padding:5px 14px;margin-bottom:20px;}
+.sec-title-big{font-size:28px;font-weight:900;margin-bottom:14px;line-height:1.2;}
+.sec-framing{font-size:15px;color:var(--text-muted);line-height:1.8;margin-bottom:24px;text-align:left;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.warn-box{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:12px;padding:16px 18px;font-size:14px;color:#C4B5FD;line-height:1.7;margin-bottom:20px;text-align:left;}
+.crisis-box{background:var(--crisis-bg);border:2px solid var(--crisis-border);border-radius:12px;padding:18px 20px;font-size:15px;color:#FCA5A5;line-height:1.7;margin-bottom:20px;text-align:left;font-weight:600;}
+.crisis-box .crisis-num{font-size:22px;font-weight:900;color:#F87171;display:block;margin-bottom:4px;}
+.sec-item-count{font-size:13px;color:var(--text-dim);margin-bottom:24px;}
+/* ── QUESTION ── */
+.q-section-badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;border-radius:20px;padding:4px 12px;margin-bottom:16px;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(0,212,212,0.25);}
+.q-num{font-size:13px;color:var(--text-dim);font-weight:600;margin-bottom:10px;}
+.q-text{font-size:21px;font-weight:700;line-height:1.5;margin-bottom:28px;color:var(--text);}
+.ans-grid{display:flex;flex-direction:column;gap:12px;}
+.ans-btn{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:18px 20px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:16px;text-align:left;}
+.ans-btn:hover{border-color:var(--accent);background:var(--accent-dim);}
+.ans-btn.selected{border-color:var(--accent);background:var(--accent-dim);}
+.ans-btn:disabled{opacity:0.7;cursor:default;}
+.ans-dot{width:14px;height:14px;min-width:14px;border-radius:50%;border:2px solid var(--border-bright);transition:all 0.2s;}
+.ans-btn.selected .ans-dot{background:var(--accent);border-color:var(--accent);}
+.ans-label{font-size:16px;font-weight:700;}
+.ans-sub{font-size:13px;color:var(--text-muted);margin-top:2px;}
+.skip-link{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--text-dim);cursor:pointer;text-decoration:underline;padding:8px;}
+.skip-link:hover{color:var(--text-muted);}
+/* ── CAREGIVER BURDEN ── */
+.burden-header{background:linear-gradient(135deg,rgba(0,212,212,0.08),rgba(0,212,212,0.03));border:1px solid rgba(0,212,212,0.2);border-radius:16px;padding:20px 24px;margin-bottom:24px;text-align:center;}
+.burden-header h2{font-size:22px;font-weight:800;margin-bottom:8px;}
+.burden-header p{font-size:14px;color:var(--text-muted);line-height:1.6;}
+/* ── COMPLETION ── */
+.completion-hero{text-align:center;padding:40px 0 32px;}
+.check-circle{width:80px;height:80px;background:rgba(34,197,94,0.12);border:2px solid var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:36px;}
+.completion-title{font-size:28px;font-weight:900;margin-bottom:10px;}
+.completion-sub{font-size:15px;color:var(--text-muted);line-height:1.7;margin-bottom:28px;}
+.session-id-box{background:var(--bg3);border:1px solid var(--border-bright);border-radius:12px;padding:16px 20px;margin-bottom:24px;text-align:center;}
+.session-id-label{font-size:12px;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}
+.session-id-val{font-size:18px;font-weight:900;color:var(--accent);letter-spacing:2px;font-family:monospace;}
+.download-btn{width:100%;padding:16px;background:transparent;color:var(--accent);border:2px solid var(--accent);border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;}
+.download-btn:hover{background:var(--accent-dim);}
+/* ── REPORT ── */
+.report-header{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;}
+.report-logo-line{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.report-title{font-size:22px;font-weight:900;}
+.report-date{font-size:12px;color:var(--text-dim);}
+.report-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.report-meta-item{background:var(--bg);border-radius:8px;padding:10px 14px;}
+.report-meta-label{font-size:11px;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px;}
+.report-meta-val{font-size:14px;font-weight:700;color:var(--text);}
+.disclaimer-box{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:14px 16px;font-size:12px;color:#FCD34D;line-height:1.7;margin-bottom:20px;}
+.domain-table{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px;}
+.domain-table-header{display:grid;grid-template-columns:2fr 1fr 1fr 1.2fr;padding:12px 20px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em;}
+.domain-row{display:grid;grid-template-columns:2fr 1fr 1fr 1.2fr;padding:14px 20px;border-bottom:1px solid var(--border);align-items:center;transition:background 0.15s;}
+.domain-row:last-child{border-bottom:none;}
+.domain-row:hover{background:rgba(255,255,255,0.02);}
+.domain-name{font-size:14px;font-weight:600;}
+.domain-score{font-size:15px;font-weight:800;color:var(--accent);}
+.sev-badge{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:3px 10px;}
+.sev-none{background:rgba(34,197,94,0.12);color:#86EFAC;}
+.sev-minimal{background:rgba(34,197,94,0.08);color:#6EE7B7;}
+.sev-mild{background:rgba(245,158,11,0.12);color:#FCD34D;}
+.sev-moderate{background:rgba(249,115,22,0.12);color:#FDBA74;}
+.sev-severe{background:rgba(239,68,68,0.12);color:#FCA5A5;}
+.sev-very-severe{background:rgba(220,38,38,0.2);color:#F87171;}
+.items-count{font-size:12px;color:var(--text-dim);}
+.flags-section{margin-bottom:20px;}
+.flag-card{background:var(--crisis-bg);border:1px solid var(--crisis-border);border-radius:12px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;}
+.flag-icon{font-size:22px;}
+.flag-text{font-size:14px;color:#FCA5A5;line-height:1.6;font-weight:600;}
+.flag-subtext{font-size:12px;color:var(--text-dim);margin-top:4px;font-weight:400;}
+.burden-result{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px;}
+.burden-result-title{font-size:14px;font-weight:700;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.06em;}
+.burden-score-row{display:flex;align-items:center;justify-content:space-between;}
+.burden-score-val{font-size:28px;font-weight:900;color:var(--accent);}
+.burden-score-label{font-size:14px;color:var(--text-muted);}
+.ptec-credit{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:var(--text-dim);line-height:1.7;}
+.ptec-credit a{color:var(--accent);text-decoration:none;}
+.report-actions{display:flex;flex-direction:column;gap:12px;}
+/* ── NAV ── */
+.nav-bar{position:sticky;bottom:0;background:rgba(10,14,29,0.97);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:16px 20px;display:flex;gap:12px;max-width:680px;width:100%;margin:0 auto;}
+.nav-back{flex:1;padding:14px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.nav-back:hover{border-color:var(--text-muted);color:var(--text);}
+.nav-next{flex:2;padding:14px;background:var(--accent);border:none;border-radius:10px;color:#0A0E1D;font-size:15px;font-weight:800;cursor:pointer;transition:background 0.2s;}
+.nav-next:hover{background:var(--accent-hover);}
+@media(max-width:480px){
+  .form-row-2{grid-template-columns:1fr;}
+  .domain-table-header,.domain-row{grid-template-columns:2fr 1fr 1.4fr;}
+  .domain-table-header .col-items,.domain-row .items-count{display:none;}
+  .subscale-grid{grid-template-columns:1fr;}
+  .report-meta{grid-template-columns:1fr;}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;}
+}
 </style>
 </head>
 <body>
-<div class="container">
-
-  <div class="dev-badge">🔧 Dev Preview — Instrument Build In Progress</div>
-
-  <div class="logo">NR<span>O</span>S-P</div>
-  <div class="ver">NeuroRecovery Outcome Scale: Pediatric | v1.0-dev | Beacon Clinical Research</div>
-
-  <div class="card">
-    <h2>PANS / PANDAS Caregiver Outcome Instrument</h2>
-    <p>NROS-P is a caregiver-reported outcome tool for tracking symptom burden and treatment response in children with PANS, PANDAS, and related inflammatory brain disorders. Built on the validated PTEC framework (Vyshedskiy et al., 2025 — 101 items, Cronbach's α = 0.96) with BeaconCR longitudinal research enhancements.</p>
-    <div class="subscales">
-      <div class="sub">I. Behavior / Mood</div>
-      <div class="sub">II. OCD</div>
-      <div class="sub">III. Anxiety</div>
-      <div class="sub">IV. Food Intake</div>
-      <div class="sub">V. Tics</div>
-      <div class="sub">VI. Cognitive / Dev</div>
-      <div class="sub">VII. Sensory</div>
-      <div class="sub">VIII. Other</div>
-      <div class="sub">IX. Sleep</div>
-      <div class="sub">X. Health</div>
+<div id="app">
+  <div class="sticky-header" id="stickyHeader">
+    <div class="header-brand">
+      <span class="header-logo-text">
+        <span class="logo-n">N</span><span class="logo-r">R</span><span class="logo-o">O</span><span class="logo-s">S</span><span class="logo-dash">-</span><span class="logo-p">P</span>
+      </span>
+      <span class="flag-inline">🇺🇸</span>
     </div>
+    <div class="progress-bar-wrap" id="progressWrap" style="display:none">
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-label" id="progressLabel"></div>
+    </div>
+    <span class="ver-chip">v1.0-dev</span>
   </div>
-
-  <div class="status-card">
-    <h3>Build Status</h3>
-    <div class="status-row"><span class="label">Instrument</span><span class="val">Building — 101 items / 10 subscales</span></div>
-    <div class="status-row"><span class="label">Registration gateway</span><span class="val">Pending</span></div>
-    <div class="status-row"><span class="label">Flare status gate</span><span class="val">Pending</span></div>
-    <div class="status-row"><span class="label">Safety flags + 988 prompt</span><span class="val">Pending</span></div>
-    <div class="status-row"><span class="label">Caregiver burden co-scale</span><span class="val">Pending</span></div>
-    <div class="status-row"><span class="label">Admin notification portal</span><span class="val">Pending</span></div>
-    <div class="status-row"><span class="label">Backend / HIPAA hardening</span><span class="val">Architecture complete — build queued</span></div>
-    <div class="status-row"><span class="label">Repo</span><span class="val">BeaconCR-Tanno/nros-p-instrument</span></div>
-    <div class="status-row"><span class="label">Target URL</span><span class="val">nros-p-dev.beaconcr.com</span></div>
-  </div>
-
-  <div class="footer">
-    PTEC items © 2022–2026 Neuroimmune Foundation — used with attribution.<br>
-    NROS-P enhancements © 2026 <a href="https://beaconcr.com">Beacon Clinical Research</a><br>
-    <a href="https://neuroimmune.org/PTEC">neuroimmune.org/PTEC</a> &nbsp;|&nbsp;
-    <a href="https://github.com/BeaconCR-Tanno/nros-p-instrument">GitHub</a>
-  </div>
-
+  <div id="appContent"></div>
 </div>
+
+<script>
+'use strict';
+var VERSION='1.0-dev';
+var STORE_PREFIX='nros_p_v1_';
+
+// ── ALL 101 PTEC ITEMS ──
+var SECTIONS=[
+  {id:'bm',num:1,title:'Behavior / Mood',count:20,
+   framing:'The following questions are about your child\'s behavior and emotional state. Please rate how much of a problem each item has been.',
+   sensitive:false,crisis:false,
+   items:['Rages','School refusal','Uncooperative or resistant','Oppositional behavior','Disagreeable / non-compliant','Temper tantrums','Shouts or screams','Insensitive to others\' feelings','Inappropriate laughing / crying','Disinhibited / impulsive','Avoids contact with others','Harms self','Irritable / agitated','Destructive to property','Verbal aggression','Physical aggression','Unhappy / crying','Depressed mood','No motivation / joy','Mood swings']},
+  {id:'ocd',num:2,title:'OCD',count:28,
+   framing:'Some of these questions describe thoughts that may feel disturbing. In PANS and PANDAS, neuroinflammation can cause intrusive thoughts your child does not want and finds very upsetting. These are neurological symptoms — they do not reflect your child\'s character or intentions. Please answer as honestly as you can.',
+   sensitive:true,crisis:false,
+   items:['Unwanted sexual thoughts','Violent / horrific intrusive images','Non-violent intrusive thoughts','Obsession / fear of germs','Washing / cleaning compulsions','Fear chemicals / solvents / contaminants','Fears harm will come to self','Fears hurting self / others','Fears will be responsible for aggressive / illegal behavior','Fear of blurting obscenities','Perfectionism','Checking or repeating obsessions / rituals','Counting rituals','Destructive to property','Confessing','Reassurance seeking','Obsessive speech','Repetitive speech','Rigid routines','Hoarding rituals','Magical thoughts / superstitious obsessions','Lucky / unlucky words, numbers, colors','Requires symmetry','Arranging obsessions','Obsession with order / location of objects','Need to tap or touch','Overly concerned with health','Requires another person to participate in OCD']},
+  {id:'anx',num:3,title:'Anxiety',count:5,
+   framing:'These questions are about your child\'s anxiety symptoms.',
+   sensitive:false,crisis:false,
+   items:['Separation anxiety','Irrational or amplified fears','Avoids leaving home','Anxious about being around people','General / other anxiety']},
+  {id:'food',num:4,title:'Food Intake',count:8,
+   framing:'These questions are about your child\'s eating and drinking behaviors.',
+   sensitive:false,crisis:false,
+   items:['Food refusal / anorexia','Limited fluid intake','Picky eating','Negative body image','Limited due to choking fear','Limited due to fear of vomiting','Limited due to contamination fear','Urge to overeat']},
+  {id:'tics',num:5,title:'Tics',count:2,
+   framing:'These questions are about tic behaviors.',
+   sensitive:false,crisis:false,
+   items:['Vocal tics','Motor tics']},
+  {id:'cog',num:6,title:'Cognitive / Developmental',count:7,
+   framing:'These questions are about cognitive and developmental changes you have observed.',
+   sensitive:false,crisis:false,
+   items:['Memory issues','Brain fog','Stutters','Baby talk','Gross motor regression (tripping / coordination issues)','Fine motor: difficulty with / regression in handwriting or art','Difficulty with / regression in math skills']},
+  {id:'sen',num:7,title:'Sensory',count:6,
+   framing:'These questions are about sensory sensitivities.',
+   sensitive:false,crisis:false,
+   items:['Sound-sensitive','Light-sensitive','Sensitive to smells','Sensitive to textures','Other sensory sensitivities','Amplified sensory seeking']},
+  {id:'oth',num:8,title:'Other Symptoms',count:11,
+   framing:'This section includes some of the most serious symptoms PANS can cause. Please answer as honestly as you can — this information is important for your child\'s care team. You may skip any question.',
+   sensitive:true,crisis:true,
+   items:['Hallucinations','Delusions','Paranoia','Suicidal ideation','Homicidal ideation','Attention issues','Hyperactivity','Daytime urinary frequency','Daytime wetting / soiling','Lacks friends','Dilated pupils']},
+  {id:'slp',num:9,title:'Sleep',count:5,
+   framing:'These questions are about your child\'s sleep.',
+   sensitive:false,crisis:false,
+   items:['Nightmares','Night terrors','Problems falling asleep','Problems staying asleep','Bedwetting']},
+  {id:'hlth',num:10,title:'Health',count:9,
+   framing:'These questions are about physical health symptoms.',
+   sensitive:false,crisis:false,
+   items:['Constipation','Diarrhea','Acute infection','Fatigued','Lethargic','Pain in stomach','Pain in head','Pain in joints','Pain other']}
+];
+
+var BURDEN_ITEMS=[
+  'I feel overwhelmed by my child\'s care needs',
+  'My child\'s condition significantly affects my sleep',
+  'I have had to reduce my work hours or activities to care for my child',
+  'I feel isolated or unsupported as a caregiver',
+  'My own physical or mental health has been affected by caregiving'
+];
+
+var SAFETY_ITEMS=['ocd_3','ocd_7','oth_3','oth_4']; // 0-indexed within section
+
+var SCALE=[
+  {val:0,label:'Not a problem',sub:'Not present or not an issue'},
+  {val:1,label:'Minor problem',sub:'Occasionally present, manageable'},
+  {val:2,label:'Moderate problem',sub:'Frequently present, noticeable impact'},
+  {val:3,label:'Serious problem',sub:'Constantly present, major impact'}
+];
+
+// Build flat screens array
+var SCREENS=[];
+SCREENS.push({type:'landing'});
+SCREENS.push({type:'registration'});
+SCREENS.push({type:'flare'});
+var totalQ=0;
+SECTIONS.forEach(function(sec){
+  SCREENS.push({type:'section-transition',sec:sec});
+  sec.items.forEach(function(item,idx){
+    SCREENS.push({type:'question',sec:sec,itemIdx:idx,itemText:item,
+      qId:sec.id+'_'+idx, globalIdx:totalQ});
+    totalQ++;
+  });
+});
+SCREENS.push({type:'burden-transition'});
+BURDEN_ITEMS.forEach(function(item,idx){
+  SCREENS.push({type:'burden-question',itemIdx:idx,itemText:item,bId:'burden_'+idx});
+});
+SCREENS.push({type:'completion'});
+SCREENS.push({type:'report'});
+
+var TOTAL_Q_SCREENS=totalQ+BURDEN_ITEMS.length;
+var REPORT_IDX=SCREENS.length-1;
+var COMPLETION_IDX=SCREENS.length-2;
+
+// ── STATE ──
+var currentScreen=0;
+var responses={};
+var burdenResponses={};
+var registration={};
+var flareData={};
+var sessionId='';
+var completedAt='';
+var consentChecked=false;
+
+function saveState(){
+  try{
+    localStorage.setItem(STORE_PREFIX+'screen',currentScreen);
+    localStorage.setItem(STORE_PREFIX+'responses',JSON.stringify(responses));
+    localStorage.setItem(STORE_PREFIX+'burden',JSON.stringify(burdenResponses));
+    localStorage.setItem(STORE_PREFIX+'registration',JSON.stringify(registration));
+    localStorage.setItem(STORE_PREFIX+'flare',JSON.stringify(flareData));
+    localStorage.setItem(STORE_PREFIX+'sessionId',sessionId);
+    localStorage.setItem(STORE_PREFIX+'completedAt',completedAt);
+  }catch(e){}
+}
+function loadState(){
+  try{
+    var sc=localStorage.getItem(STORE_PREFIX+'screen');
+    if(sc!==null)currentScreen=parseInt(sc,10);
+    var r=localStorage.getItem(STORE_PREFIX+'responses');
+    if(r)responses=JSON.parse(r);
+    var b=localStorage.getItem(STORE_PREFIX+'burden');
+    if(b)burdenResponses=JSON.parse(b);
+    var reg=localStorage.getItem(STORE_PREFIX+'registration');
+    if(reg){registration=JSON.parse(reg);consentChecked=true;}
+    var fl=localStorage.getItem(STORE_PREFIX+'flare');
+    if(fl)flareData=JSON.parse(fl);
+    var sid=localStorage.getItem(STORE_PREFIX+'sessionId');
+    if(sid)sessionId=sid;
+    var ca=localStorage.getItem(STORE_PREFIX+'completedAt');
+    if(ca)completedAt=ca;
+  }catch(e){}
+}
+function clearState(){
+  ['screen','responses','burden','registration','flare','sessionId','completedAt']
+    .forEach(function(k){localStorage.removeItem(STORE_PREFIX+k);});
+  currentScreen=0;responses={};burdenResponses={};registration={};
+  flareData={};sessionId='';completedAt='';consentChecked=false;
+}
+function generateSessionId(){
+  var ts=Date.now().toString(36).toUpperCase();
+  var rand=Math.random().toString(36).slice(2,7).toUpperCase();
+  return 'NP-'+ts+'-'+rand;
+}
+
+// ── PROGRESS ──
+function updateProgress(){
+  var pw=document.getElementById('progressWrap');
+  var pf=document.getElementById('progressFill');
+  var pl=document.getElementById('progressLabel');
+  var scr=SCREENS[currentScreen];
+  if(['landing','registration','flare','completion','report'].includes(scr.type)){
+    if(pw)pw.style.display='none'; return;
+  }
+  if(pw)pw.style.display='block';
+  var qCount=0;
+  for(var i=0;i<currentScreen;i++){
+    if(SCREENS[i].type==='question'||SCREENS[i].type==='burden-question')qCount++;
+  }
+  var pct=Math.round((qCount/TOTAL_Q_SCREENS)*100);
+  if(pf)pf.style.width=pct+'%';
+  if(pl)pl.textContent=qCount+' of '+TOTAL_Q_SCREENS+' questions';
+}
+
+// ── RENDER ──
+function render(){
+  var app=document.getElementById('appContent');
+  var scr=SCREENS[currentScreen];
+  updateProgress();
+  window.scrollTo(0,0);
+  switch(scr.type){
+    case 'landing':       renderLanding(app); break;
+    case 'registration':  renderRegistration(app); break;
+    case 'flare':         renderFlare(app); break;
+    case 'section-transition': renderSectionTransition(app,scr); break;
+    case 'question':      renderQuestion(app,scr); break;
+    case 'burden-transition': renderBurdenTransition(app); break;
+    case 'burden-question': renderBurdenQuestion(app,scr); break;
+    case 'completion':    renderCompletion(app); break;
+    case 'report':        renderReport(app); break;
+  }
+}
+
+// ── BEACON SVG LOGO ──
+function beaconLogo(size){
+  size=size||80;
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="beacon-logo-svg">'+
+    '<circle cx="60" cy="60" r="56" stroke="#00D4D4" stroke-width="2.5" stroke-dasharray="4 3"/>'+
+    '<circle cx="60" cy="60" r="38" fill="rgba(0,212,212,0.06)" stroke="#00D4D4" stroke-width="1.5"/>'+
+    // simplified vitruvian-style figure
+    '<ellipse cx="60" cy="38" rx="8" ry="9" fill="#00D4D4" opacity="0.9"/>'+
+    '<line x1="60" y1="47" x2="60" y2="82" stroke="#00D4D4" stroke-width="3" stroke-linecap="round"/>'+
+    '<line x1="42" y1="60" x2="78" y2="60" stroke="#00D4D4" stroke-width="2.5" stroke-linecap="round"/>'+
+    '<line x1="60" y1="82" x2="47" y2="100" stroke="#00D4D4" stroke-width="2.5" stroke-linecap="round"/>'+
+    '<line x1="60" y1="82" x2="73" y2="100" stroke="#00D4D4" stroke-width="2.5" stroke-linecap="round"/>'+
+    // DNA helix spine dots
+    '<circle cx="56" cy="54" r="2" fill="#00D4D4" opacity="0.7"/>'+
+    '<circle cx="64" cy="59" r="2" fill="#00D4D4" opacity="0.7"/>'+
+    '<circle cx="56" cy="64" r="2" fill="#00D4D4" opacity="0.7"/>'+
+    '<circle cx="64" cy="69" r="2" fill="#00D4D4" opacity="0.7"/>'+
+    '<circle cx="56" cy="74" r="2" fill="#00D4D4" opacity="0.5"/>'+
+    '</svg>';
+}
+
+// ── LANDING ──
+function renderLanding(app){
+  app.innerHTML='<div class="screen">'+
+    '<div class="landing-hero">'+
+      beaconLogo(88)+
+      '<div class="nros-p-title">'+
+        '<span style="color:#B22234">N</span>'+
+        '<span style="color:#FFFFFF">R</span>'+
+        '<span style="color:#3C3B6E">O</span>'+
+        '<span style="color:#B22234">S</span>'+
+        '<span style="color:#64748B">-</span>'+
+        '<span style="color:#00D4D4">P</span>'+
+      '</div>'+
+      '<div class="nros-p-sub">Pediatric Neuro Outcome Scale — PANS / PANDAS</div>'+
+      '<div class="usa-badge">🇺🇸 Designed in America &nbsp;|&nbsp; Beacon Clinical Research</div>'+
+    '</div>'+
+    '<div class="dev-notice">🔧 <strong>Development Preview</strong> — This instrument is in clinical review. For authorized research and review only. All data saved locally on your device.</div>'+
+    '<div class="landing-card">'+
+      '<h3>About This Assessment</h3>'+
+      '<p>This caregiver-reported outcome tool helps track symptom changes in children with PANS, PANDAS, and related inflammatory brain disorders across 10 clinical domains. Rate how much of a problem each item is for your child right now.</p>'+
+      '<div class="subscale-grid">'+
+        '<div class="subscale-chip">I. Behavior / Mood</div>'+
+        '<div class="subscale-chip">II. OCD</div>'+
+        '<div class="subscale-chip">III. Anxiety</div>'+
+        '<div class="subscale-chip">IV. Food Intake</div>'+
+        '<div class="subscale-chip">V. Tics</div>'+
+        '<div class="subscale-chip">VI. Cognitive / Dev</div>'+
+        '<div class="subscale-chip">VII. Sensory</div>'+
+        '<div class="subscale-chip">VIII. Other</div>'+
+        '<div class="subscale-chip">IX. Sleep</div>'+
+        '<div class="subscale-chip">X. Health</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="attribution">'+
+      'Instrument items adapted from the validated PTEC (Vyshedskiy et al., <em>Pediatric Reports</em>, 2025 — Cronbach\'s α = 0.96) &nbsp;|&nbsp; '+
+      '<a href="https://neuroimmune.org/PTEC" target="_blank">neuroimmune.org/PTEC</a><br>'+
+      'NROS-P enhancements © 2026 <a href="https://beaconcr.com" target="_blank">Beacon Clinical Research</a>'+
+    '</div>'+
+    '<button class="btn-primary" onclick="goNext()">Begin Assessment →</button>'+
+  '</div>';
+}
+
+// ── REGISTRATION ──
+function renderRegistration(app){
+  var r=registration;
+  app.innerHTML='<div class="screen">'+
+    '<div class="reg-title">Caregiver Registration</div>'+
+    '<div class="reg-sub">Please tell us a little about yourself and the child you are assessing. This information stays on your device.</div>'+
+    '<div class="form-section">'+
+      '<div class="form-section-title">About You (Caregiver)</div>'+
+      '<div class="form-row form-row-2">'+
+        '<div class="form-row"><label class="form-label">First Name *</label><input class="form-input" id="reg_fname" value="'+(r.firstName||'')+'" placeholder="First name"></div>'+
+        '<div class="form-row"><label class="form-label">Last Name *</label><input class="form-input" id="reg_lname" value="'+(r.lastName||'')+'" placeholder="Last name"></div>'+
+      '</div>'+
+      '<div class="form-row"><label class="form-label">Your Relationship to Child *</label>'+
+        '<select class="form-select" id="reg_rel">'+
+          '<option value="">— Select relationship —</option>'+
+          ['Parent (Mother)','Parent (Father)','Grandparent','Legal Guardian','Therapist','Teacher','Other Caregiver']
+            .map(function(o){return '<option value="'+o+'"'+(r.relationship===o?' selected':'')+'>'+o+'</option>';}).join('')+
+        '</select></div>'+
+      '<div class="form-row"><label class="form-label">Email (optional — for report copy)</label><input class="form-input" id="reg_email" type="email" value="'+(r.email||'')+'" placeholder="your@email.com"></div>'+
+    '</div>'+
+    '<div class="form-section">'+
+      '<div class="form-section-title">About the Child</div>'+
+      '<div class="form-row"><label class="form-label">Child\'s First Name *</label><input class="form-input" id="reg_childname" value="'+(r.childName||'')+'" placeholder="First name only"></div>'+
+      '<div class="form-row form-row-2">'+
+        '<div class="form-row"><label class="form-label">Child\'s Age *</label><input class="form-input" id="reg_age" type="number" min="2" max="25" value="'+(r.childAge||'')+'" placeholder="Age in years"></div>'+
+        '<div class="form-row"><label class="form-label">Diagnosis *</label>'+
+          '<select class="form-select" id="reg_dx">'+
+            '<option value="">— Select —</option>'+
+            ['PANS','PANDAS','Other inflammatory brain disorder','Undiagnosed / Under evaluation']
+              .map(function(o){return '<option value="'+o+'"'+(r.diagnosis===o?' selected':'')+'>'+o+'</option>';}).join('')+
+          '</select></div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="form-section">'+
+      '<div class="form-section-title">Consent</div>'+
+      '<div class="consent-row" id="consentRow" onclick="toggleConsent()">'+
+        '<div class="consent-check'+(consentChecked?' checked':'')+'" id="consentCheck"></div>'+
+        '<div class="consent-text">I understand this is a research and clinical review tool, not a diagnostic instrument. Results are for informational purposes only and do not replace professional medical advice. Data is stored locally on this device. I am at least 18 years old.</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="reg-error" id="regError"></div>'+
+    '<button class="btn-primary" onclick="submitReg()" style="margin-top:20px">Continue →</button>'+
+  '</div>'+navBar(true);
+}
+function toggleConsent(){
+  consentChecked=!consentChecked;
+  var el=document.getElementById('consentCheck');
+  if(el){el.className='consent-check'+(consentChecked?' checked':'');}
+}
+function submitReg(){
+  var fname=document.getElementById('reg_fname').value.trim();
+  var lname=document.getElementById('reg_lname').value.trim();
+  var rel=document.getElementById('reg_rel').value;
+  var email=document.getElementById('reg_email').value.trim();
+  var cn=document.getElementById('reg_childname').value.trim();
+  var age=document.getElementById('reg_age').value;
+  var dx=document.getElementById('reg_dx').value;
+  var err=document.getElementById('regError');
+  function showErr(msg){err.textContent=msg;err.style.display='block';}
+  err.style.display='none';
+  if(!fname){showErr('Please enter your first name.');return;}
+  if(!lname){showErr('Please enter your last name.');return;}
+  if(!rel){showErr('Please select your relationship to the child.');return;}
+  if(!cn){showErr('Please enter the child\'s first name.');return;}
+  if(!age){showErr('Please enter the child\'s age.');return;}
+  if(!dx){showErr('Please select a diagnosis.');return;}
+  if(!consentChecked){showErr('Please check the consent box to continue.');return;}
+  registration={firstName:fname,lastName:lname,relationship:rel,email:email,
+    childName:cn,childAge:parseInt(age,10),diagnosis:dx,consentAt:new Date().toISOString()};
+  if(!sessionId)sessionId=generateSessionId();
+  saveState();
+  goNext();
+}
+
+// ── FLARE GATE ──
+function renderFlare(app){
+  var opts=[
+    {val:'flare',label:'Active Flare',desc:'Currently experiencing a significant increase in symptoms',icon:'🔥'},
+    {val:'stable',label:'Stable / Baseline',desc:'Symptoms are at their typical level or in remission',icon:'✅'},
+    {val:'unsure',label:'Not Sure',desc:'Uncertain about current status',icon:'🤔'}
+  ];
+  var triggerOpts=['Strep confirmed infection','Strep exposure (no confirmed infection)','COVID-19','Influenza','Other viral infection','Other bacterial infection','Allergen exposure','Unknown / No identified trigger'];
+  app.innerHTML='<div class="screen">'+
+    '<div class="flare-title">Current Status</div>'+
+    '<div class="flare-sub">Is '+(registration.childName||'your child')+' currently in a flare? This helps us understand the context of today\'s assessment.</div>'+
+    '<div class="flare-options">'+
+      opts.map(function(o){
+        return '<div class="flare-option'+(flareData.status===o.val?' selected':'')+'" onclick="selectFlare(\''+o.val+'\')">'+
+          '<div class="flare-option-icon">'+o.icon+'</div>'+
+          '<div><div class="flare-option-label">'+o.label+'</div><div class="flare-option-desc">'+o.desc+'</div></div>'+
+        '</div>';
+      }).join('')+
+    '</div>'+
+    '<div id="triggerSection" style="display:'+(flareData.status==='flare'?'block':'none')+'">'+
+      '<div class="trigger-section">'+
+        '<label class="trigger-label">What triggered this flare? (best estimate)</label>'+
+        '<select class="form-select" id="triggerSelect">'+
+          '<option value="">— Select trigger —</option>'+
+          triggerOpts.map(function(t){return '<option value="'+t+'"'+(flareData.trigger===t?' selected':'')+'>'+t+'</option>';}).join('')+
+        '</select>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+navBar(true);
+}
+function selectFlare(val){
+  flareData.status=val;
+  var ts=document.getElementById('triggerSection');
+  if(ts)ts.style.display=(val==='flare'?'block':'none');
+  document.querySelectorAll('.flare-option').forEach(function(el,i){
+    el.classList.toggle('selected',['flare','stable','unsure'][i]===val);
+  });
+  saveState();
+}
+function submitFlare(){
+  if(!flareData.status){alert('Please select your child\'s current status.');return;}
+  var ts=document.getElementById('triggerSelect');
+  if(ts&&ts.value)flareData.trigger=ts.value;
+  saveState();
+  goNext();
+}
+
+// ── SECTION TRANSITION ──
+function renderSectionTransition(app,scr){
+  var sec=scr.sec;
+  var numBars='';
+  for(var i=0;i<10;i++)numBars+='<span style="display:inline-block;width:24px;height:4px;border-radius:2px;margin:0 2px;background:'+(i<sec.num?'var(--accent)':'var(--border)')+'"></span>';
+  app.innerHTML='<div class="screen">'+
+    '<div class="sec-transition">'+
+      '<div class="sec-num-badge">Section '+sec.num+' of 10</div>'+
+      '<div>'+numBars+'</div><br>'+
+      '<div class="sec-title-big">'+sec.title+'</div>'+
+      '<div class="sec-item-count">'+sec.count+' question'+(sec.count!==1?'s':'')+'</div>'+
+      (sec.sensitive?'<div class="warn-box">⚠️ '+sec.framing+'</div>':
+        '<div class="sec-framing">'+sec.framing+'</div>')+
+      (sec.crisis?'<div class="crisis-box"><span class="crisis-num">988</span>If you are concerned about your child\'s safety right now, call or text <strong>988</strong> (Suicide & Crisis Lifeline) or call 911.</div>':'')+
+    '</div>'+
+  '</div>'+navBar(true);
+}
+
+// ── QUESTION ──
+function renderQuestion(app,scr){
+  var sec=scr.sec;
+  var saved=responses[scr.qId];
+  app.innerHTML='<div class="screen">'+
+    '<div class="q-section-badge">Section '+sec.num+' — '+sec.title+'</div>'+
+    '<div class="q-num">Question '+(scr.itemIdx+1)+' of '+sec.count+'</div>'+
+    '<div class="q-text">'+scr.itemText+'</div>'+
+    '<div class="ans-grid">'+
+      SCALE.map(function(s){
+        var sel=saved===s.val;
+        return '<button class="ans-btn'+(sel?' selected':'')+'" onclick="selectAns(\''+scr.qId+'\','+s.val+',this)" '+(sel?'disabled':'')+'>'+
+          '<div class="ans-dot"></div>'+
+          '<div><div class="ans-label">'+s.label+'</div><div class="ans-sub">'+s.sub+'</div></div>'+
+        '</button>';
+      }).join('')+
+    '</div>'+
+    '<span class="skip-link" onclick="skipQ(\''+scr.qId+'\')">Skip this question</span>'+
+  '</div>'+navBar(true);
+  // Check safety
+  checkSafetyOnRender(scr);
+}
+function selectAns(qId,val,btn){
+  responses[qId]=val;
+  saveState();
+  var btns=btn.parentNode.querySelectorAll('.ans-btn');
+  btns.forEach(function(b){b.classList.remove('selected');b.removeAttribute('disabled');});
+  btn.classList.add('selected');
+  btns.forEach(function(b){b.setAttribute('disabled','disabled');});
+  // Safety check for crisis items
+  var safetyTrigger=(['oth_3','oth_4','bm_11'].includes(qId))&&val>=2;
+  if(safetyTrigger){showCrisisBanner();}
+  setTimeout(function(){goNext();},350);
+}
+function skipQ(qId){
+  responses[qId]=-1;
+  saveState();
+  goNext();
+}
+function checkSafetyOnRender(scr){
+  if(['oth_3','oth_4','bm_11'].includes(scr.qId)&&responses[scr.qId]>=2){showCrisisBanner();}
+}
+function showCrisisBanner(){
+  var existing=document.getElementById('crisisBanner');
+  if(existing)return;
+  var banner=document.createElement('div');
+  banner.id='crisisBanner';
+  banner.style.cssText='position:fixed;bottom:80px;left:0;right:0;z-index:999;padding:12px 20px;max-width:680px;margin:0 auto;';
+  banner.innerHTML='<div style="background:var(--crisis-bg);border:2px solid var(--crisis-border);border-radius:12px;padding:14px 18px;font-size:14px;color:#FCA5A5;font-weight:600;line-height:1.6;">'+
+    '⚠️ If you are concerned about your child\'s immediate safety, call or text <strong>988</strong> or call <strong>911</strong>.'+
+    '<span onclick="this.parentNode.parentNode.remove()" style="float:right;cursor:pointer;color:var(--text-dim);margin-left:12px;">✕</span></div>';
+  document.body.appendChild(banner);
+  setTimeout(function(){if(banner.parentNode)banner.parentNode.removeChild(banner);},8000);
+}
+
+// ── BURDEN TRANSITION ──
+function renderBurdenTransition(app){
+  app.innerHTML='<div class="screen">'+
+    '<div class="sec-transition">'+
+      '<div class="sec-num-badge">Final Section — Caregiver Wellbeing</div>'+
+      '<div class="sec-title-big">These Questions Are About You</div>'+
+      '<div class="burden-header">'+
+        '<h2>You Matter Too</h2>'+
+        '<p>Caregivers of children with PANS and PANDAS carry a significant burden. These 5 questions are about your own wellbeing — separate from your child\'s symptoms. Your responses help us understand the full impact of this condition.</p>'+
+      '</div>'+
+      '<div class="sec-framing">Please answer honestly about yourself. There are no right or wrong answers. This section takes about 1 minute.</div>'+
+    '</div>'+
+  '</div>'+navBar(true);
+}
+
+// ── BURDEN QUESTION ──
+function renderBurdenQuestion(app,scr){
+  var saved=burdenResponses[scr.bId];
+  app.innerHTML='<div class="screen">'+
+    '<div class="q-section-badge" style="background:rgba(245,158,11,0.12);color:var(--amber);border-color:rgba(245,158,11,0.25);">Caregiver Wellbeing — '+( scr.itemIdx+1)+' of '+BURDEN_ITEMS.length+'</div>'+
+    '<div class="q-num">About you as a caregiver</div>'+
+    '<div class="q-text">'+scr.itemText+'</div>'+
+    '<div class="ans-grid">'+
+      SCALE.map(function(s){
+        var sel=saved===s.val;
+        return '<button class="ans-btn'+(sel?' selected':'')+'" onclick="selectBurden(\''+scr.bId+'\','+s.val+',this)" '+(sel?'disabled':'')+'>'+
+          '<div class="ans-dot"></div>'+
+          '<div><div class="ans-label">'+s.label+'</div><div class="ans-sub">'+s.sub+'</div></div>'+
+        '</button>';
+      }).join('')+
+    '</div>'+
+    '<span class="skip-link" onclick="skipBurden(\''+scr.bId+'\')">Skip this question</span>'+
+  '</div>'+navBar(true);
+}
+function selectBurden(bId,val,btn){
+  burdenResponses[bId]=val;
+  saveState();
+  var btns=btn.parentNode.querySelectorAll('.ans-btn');
+  btns.forEach(function(b){b.classList.remove('selected');b.removeAttribute('disabled');});
+  btn.classList.add('selected');
+  btns.forEach(function(b){b.setAttribute('disabled','disabled');});
+  setTimeout(function(){goNext();},350);
+}
+function skipBurden(bId){
+  burdenResponses[bId]=-1;
+  saveState();
+  goNext();
+}
+
+// ── COMPLETION ──
+function renderCompletion(app){
+  if(!completedAt){completedAt=new Date().toISOString();saveState();}
+  var dt=new Date(completedAt);
+  app.innerHTML='<div class="screen">'+
+    '<div class="completion-hero">'+
+      '<div class="check-circle">✓</div>'+
+      '<div class="completion-title">Assessment Complete</div>'+
+      '<div class="completion-sub">Thank you for completing the NROS-P assessment for '+(registration.childName||'your child')+'. Your responses have been recorded.</div>'+
+      '<div class="session-id-box">'+
+        '<div class="session-id-label">Session ID</div>'+
+        '<div class="session-id-val">'+sessionId+'</div>'+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--text-dim);margin-bottom:24px;">Completed: '+dt.toLocaleDateString()+' at '+dt.toLocaleTimeString()+'</div>'+
+      '<button class="download-btn" onclick="downloadSession()">📥 Download Encrypted Session File</button>'+
+      '<button class="btn-primary" onclick="goToReport()">View Report →</button>'+
+      '<div style="font-size:12px;color:var(--text-dim);margin-top:16px;text-align:center;line-height:1.7;">Data is saved locally on your device only.<br>Share the encrypted file with your care team.</div>'+
+    '</div>'+
+  '</div>';
+}
+function goToReport(){
+  currentScreen=REPORT_IDX;
+  saveState();
+  render();
+}
+
+// ── SCORING ──
+function domainScore(secId,itemCount){
+  var vals=[],answered=0,skipped=0;
+  for(var i=0;i<itemCount;i++){
+    var v=responses[secId+'_'+i];
+    if(v===undefined||v===null)continue;
+    if(v===-1){skipped++;continue;}
+    vals.push(v);answered++;
+  }
+  if(answered===0)return{score:null,answered:0,skipped:skipped,total:itemCount};
+  var sum=vals.reduce(function(a,b){return a+b;},0);
+  return{score:Math.round((sum/answered)*100)/100,answered:answered,skipped:skipped,total:itemCount};
+}
+function severityBand(score){
+  if(score===null)return{label:'—',cls:''};
+  if(score<0.5)return{label:'None–Minimal',cls:'sev-none'};
+  if(score<1.0)return{label:'Minimal',cls:'sev-minimal'};
+  if(score<1.6)return{label:'Mild',cls:'sev-mild'};
+  if(score<2.3)return{label:'Moderate',cls:'sev-moderate'};
+  if(score<2.8)return{label:'Severe',cls:'sev-severe'};
+  return{label:'Very Severe',cls:'sev-very-severe'};
+}
+function burdenScore(){
+  var vals=[],answered=0;
+  BURDEN_ITEMS.forEach(function(_,i){
+    var v=burdenResponses['burden_'+i];
+    if(v!==undefined&&v!==null&&v!==-1){vals.push(v);answered++;}
+  });
+  if(answered===0)return null;
+  return Math.round((vals.reduce(function(a,b){return a+b;},0)/answered)*100)/100;
+}
+function buildFlags(){
+  var flags=[];
+  // Suicidal ideation
+  var si=responses['oth_3'];
+  if(si>=2)flags.push({icon:'🚨',text:'Suicidal Ideation — '+SCALE[si].label,sub:'Please contact the care team immediately. Call or text 988.',urgent:true});
+  // Homicidal ideation
+  var hi=responses['oth_4'];
+  if(hi>=2)flags.push({icon:'🚨',text:'Homicidal Ideation — '+SCALE[hi].label,sub:'Please contact the care team immediately. Call or text 988.',urgent:true});
+  // Self-harm
+  var sh=responses['bm_11'];
+  if(sh>=2)flags.push({icon:'⚠️',text:'Self-harm — '+SCALE[sh].label,sub:'Discuss with clinical team at next visit.',urgent:sh===3});
+  // Severe OCD
+  var ocdR=domainScore('ocd',28);
+  if(ocdR.score!==null&&ocdR.score>=2.3)flags.push({icon:'🧠',text:'Severe OCD symptom burden (score '+ocdR.score.toFixed(2)+')',sub:'OCD domain score in severe range. Clinical review recommended.',urgent:false});
+  return flags;
+}
+function buildDataLog(){
+  return{
+    schemaVersion:'1.0',instrument:'NROS-P',instrumentVersion:VERSION,
+    sessionId:sessionId,completedAt:completedAt,generatedAt:new Date().toISOString(),
+    registration:registration,flareData:flareData,
+    responses:responses,burdenResponses:burdenResponses,
+    domainScores:SECTIONS.map(function(sec){
+      var r=domainScore(sec.id,sec.count);
+      return{domain:sec.title,section:sec.id,score:r.score,
+        severity:severityBand(r.score).label,itemsAnswered:r.answered,
+        itemsSkipped:r.skipped,itemsTotal:r.total};
+    }),
+    burdenScore:burdenScore(),
+    safetyFlags:buildFlags().map(function(f){return f.text;})
+  };
+}
+
+// ── REPORT ──
+function renderReport(app){
+  var dt=completedAt?new Date(completedAt):new Date();
+  var scores=SECTIONS.map(function(sec){
+    var r=domainScore(sec.id,sec.count);
+    var sev=severityBand(r.score);
+    return{sec:sec,r:r,sev:sev};
+  });
+  var flags=buildFlags();
+  var bs=burdenScore();
+  app.innerHTML='<div class="screen">'+
+    '<div class="dev-notice" style="margin-bottom:16px;">🔧 Dev Preview — NROS-P v'+VERSION+' | Session: '+sessionId+'</div>'+
+    '<div class="disclaimer-box">⚠️ This report is for informational and research purposes only. It is not a clinical diagnosis. All treatment decisions remain with licensed physicians and care teams.</div>'+
+    '<div class="report-header">'+
+      '<div class="report-logo-line">'+
+        '<div>'+
+          '<div style="font-size:22px;font-weight:900;letter-spacing:1px;margin-bottom:2px;">'+
+            '<span style="color:#B22234">N</span><span style="color:#FFF">R</span><span style="color:#3C3B6E">O</span><span style="color:#B22234">S</span><span style="color:#64748B">-</span><span style="color:#00D4D4">P</span>'+
+          '</div>'+
+          '<div style="font-size:12px;color:var(--text-dim);">Pediatric Neuro Outcome Scale — Beacon Clinical Research</div>'+
+        '</div>'+
+        '<div style="text-align:right;">'+
+          '<div style="font-size:12px;color:var(--text-dim);">'+dt.toLocaleDateString()+'</div>'+
+          '<div style="font-size:11px;color:var(--text-dim);margin-top:2px;">🇺🇸 Designed in America</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="report-meta">'+
+        '<div class="report-meta-item"><div class="report-meta-label">Child</div><div class="report-meta-val">'+(registration.childName||'—')+'</div></div>'+
+        '<div class="report-meta-item"><div class="report-meta-label">Age</div><div class="report-meta-val">'+(registration.childAge||'—')+'</div></div>'+
+        '<div class="report-meta-item"><div class="report-meta-label">Diagnosis</div><div class="report-meta-val">'+(registration.diagnosis||'—')+'</div></div>'+
+        '<div class="report-meta-item"><div class="report-meta-label">Assessment</div><div class="report-meta-val">'+(flareData.status?flareData.status.charAt(0).toUpperCase()+flareData.status.slice(1):'—')+'</div></div>'+
+        '<div class="report-meta-item"><div class="report-meta-label">Trigger</div><div class="report-meta-val" style="font-size:12px">'+(flareData.trigger||'Not specified')+'</div></div>'+
+        '<div class="report-meta-item"><div class="report-meta-label">Reported By</div><div class="report-meta-val">'+(registration.relationship||'—')+'</div></div>'+
+      '</div>'+
+    '</div>'+
+    // Safety flags first
+    (flags.length?'<div class="flags-section">'+flags.map(function(f){
+      return '<div class="flag-card"><div class="flag-icon">'+f.icon+'</div><div><div class="flag-text">'+f.text+'</div><div class="flag-subtext">'+f.sub+'</div></div></div>';
+    }).join('')+'</div>':'')+
+    // Domain scores
+    '<div class="domain-table">'+
+      '<div class="domain-table-header"><span>Domain</span><span>Score</span><span>Severity</span><span class="col-items">Items</span></div>'+
+      scores.map(function(s){
+        return '<div class="domain-row">'+
+          '<div class="domain-name">'+s.sec.title+'</div>'+
+          '<div class="domain-score">'+(s.r.score!==null?s.r.score.toFixed(2):'—')+'</div>'+
+          '<div><span class="sev-badge '+s.sev.cls+'">'+s.sev.label+'</span></div>'+
+          '<div class="items-count">'+(s.r.answered+'/'+s.r.total)+'</div>'+
+        '</div>';
+      }).join('')+
+    '</div>'+
+    // Caregiver burden
+    '<div class="burden-result">'+
+      '<div class="burden-result-title">Caregiver Burden Score</div>'+
+      '<div class="burden-score-row">'+
+        '<div><div class="burden-score-val">'+(bs!==null?bs.toFixed(2):'—')+'</div><div style="font-size:11px;color:var(--text-dim);">out of 3.00</div></div>'+
+        '<div class="burden-score-label">'+(bs!==null?severityBand(bs).label:'Not completed')+'</div>'+
+      '</div>'+
+    '</div>'+
+    // Scale reference
+    '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px;">'+
+      '<div style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.06em;">Score Reference</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'+
+        '<div style="font-size:12px;padding:6px 10px;background:rgba(34,197,94,0.08);border-radius:6px;color:#86EFAC;">0.0 – 0.4 None to Minimal</div>'+
+        '<div style="font-size:12px;padding:6px 10px;background:rgba(34,197,94,0.06);border-radius:6px;color:#6EE7B7;">0.5 – 0.9 Minimal</div>'+
+        '<div style="font-size:12px;padding:6px 10px;background:rgba(245,158,11,0.1);border-radius:6px;color:#FCD34D;">1.0 – 1.5 Mild</div>'+
+        '<div style="font-size:12px;padding:6px 10px;background:rgba(249,115,22,0.1);border-radius:6px;color:#FDBA74;">1.6 – 2.2 Moderate</div>'+
+        '<div style="font-size:12px;padding:6px 10px;background:rgba(239,68,68,0.1);border-radius:6px;color:#FCA5A5;">2.3 – 2.7 Severe</div>'+
+        '<div style="font-size:12px;padding:6px 10px;background:rgba(220,38,38,0.15);border-radius:6px;color:#F87171;">2.8 – 3.0 Very Severe</div>'+
+      '</div>'+
+    '</div>'+
+    // Attribution
+    '<div class="ptec-credit">'+
+      'Items adapted from PTEC © 2022–2026 Neuroimmune Foundation (<a href="https://neuroimmune.org/PTEC" target="_blank">neuroimmune.org/PTEC</a>)<br>'+
+      'Vyshedskiy A et al. <em>Pediatric Reports</em>. 2025;17(4):81. doi: 10.3390/pediatric17040081<br>'+
+      'NROS-P enhancements © 2026 Beacon Clinical Research — <a href="https://beaconcr.com" target="_blank">beaconcr.com</a><br>'+
+      '🇺🇸 Designed in America'+
+    '</div>'+
+    '<div class="report-actions">'+
+      '<button class="download-btn" onclick="downloadSession()">📥 Download Session File</button>'+
+      '<button class="btn-primary" onclick="window.print()">🖨️ Print Report</button>'+
+      '<button class="btn-secondary" onclick="startOver()">Start New Assessment</button>'+
+    '</div>'+
+  '</div>';
+}
+
+// ── DOWNLOAD ──
+function downloadSession(){
+  var data=buildDataLog();
+  var json=JSON.stringify(data,null,2);
+  var blob=new Blob([json],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='NROS-P-'+sessionId+'-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ── NAV ──
+function navBar(showBack){
+  return '<div class="nav-bar">'+
+    (showBack?'<button class="nav-back" onclick="goBack()">← Back</button>':'')+
+    '<button class="nav-next" onclick="handleNext()">Next →</button>'+
+  '</div>';
+}
+function handleNext(){
+  var scr=SCREENS[currentScreen];
+  if(scr.type==='registration'){submitReg();return;}
+  if(scr.type==='flare'){submitFlare();return;}
+  goNext();
+}
+function goNext(){
+  if(currentScreen<SCREENS.length-1){
+    currentScreen++;
+    saveState();
+    render();
+  }
+}
+function goBack(){
+  if(currentScreen>0){
+    currentScreen--;
+    saveState();
+    render();
+  }
+}
+function startOver(){
+  if(confirm('Start a new assessment? Current session data will be cleared.')){
+    clearState();
+    render();
+  }
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',function(){
+  loadState();
+  render();
+});
+</script>
 </body>
 </html>
