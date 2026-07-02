@@ -5,6 +5,46 @@ Format: [Version] — Date — Summary
 
 ---
 
+## [v1.1.4-dev] — 2026-07-02
+
+### Changed — Header & Branding
+- **Hi-res BeaconCR logo:** Replaced prior JPEG with new 1081×1081 hi-res Vitruvian Man / DNA helix / globe mark. Circular crop with cyan glow border. Embedded as base64 in HTML (no external dependency).
+- **Header redesign — beaconcr.com consistency:** Sticky header now matches beaconcr.com aesthetic:
+  - Background: `rgba(8,12,26,0.98)` with `backdrop-filter: blur(16px)` (deeper navy, stronger blur)
+  - Border-bottom: subtle `rgba(0,212,212,0.12)` cyan line (replaces hard `--border`)
+  - Fixed height: `60px`
+  - Logo: 44px circular with cyan border + box-shadow glow
+  - **Brand wordmark** right of logo: "BEACON" in white bold caps + "CLINICAL REGISTRY" in cyan spaced caps (matches beaconcr.com nav logo treatment exactly)
+  - **Vertical divider** (1px, 28px tall) separating brand from NROS-P symbol
+  - NROS-P symbol at same 18px, stars row preserved
+- **Landing hero logo:** Enlarged from 96px → 120px with enhanced glow (`box-shadow: 0 0 32px`)
+- **File size reduced:** 530KB → 373KB (new logo JPEG is smaller in base64 than the original)
+
+### Infrastructure
+- Commit: `46939df` — main branch
+- Deploy: `https://nros-p-dev.beaconcr.com` — 200 OK, 313ms
+- Syntax: `node --check` clean, 37,677 chars JS
+
+---
+
+## [v1.1.3-dev] — 2026-07-02
+
+### Added — Review Page
+- **Review screen** inserted between Caregiver Wellbeing and Completion
+- Shows every question (all 101 PTEC items + 5 burden items) grouped by domain with color-coded answer pills
+- **Per-section Edit button** (✏️) jumps back to that domain's page
+- **Sticky return-to-review bar** on domain/burden pages when editing from review — cyan bar with "← Back to Review" button
+- **Submit Final Assessment** button — the only path to completion from review
+- Caregiver Wellbeing has its own ✏️ Edit entry in review
+- Session info block at bottom of review (child name, age, diagnosis, flare, session ID)
+- `rv` (return-from-review) state flag persisted in localStorage; cleared on new assessment
+
+### Infrastructure
+- Commit: `1e06edd` — main branch
+- Syntax: `node --check` clean, 37,510 chars JS
+
+---
+
 ## [v1.1-dev] — 2026-07-04
 
 ### Changed — UX Architecture
