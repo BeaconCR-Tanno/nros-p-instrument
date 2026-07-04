@@ -13,8 +13,8 @@
   --accent:#0091A8;--accent-hover:#00798C;--accent-dim:rgba(0,145,168,0.10);
   --border:#D1D5DB;--border-bright:#9CA3AF;
   --card:#FFFFFF;--card2:#F8F9FA;
-  --warn-bg:rgba(124,58,237,0.07);--warn-border:#7C3AED;
-  --crisis-bg:rgba(220,38,38,0.07);--crisis-border:#DC2626;
+  --warn-bg:#FAF5FF;--warn-border:#9333EA;
+  --crisis-bg:#FFF5F5;--crisis-border:#DC2626;
   --dev-bg:rgba(14,165,233,0.08);--dev-border:#0EA5E9;--dev-text:#0369A1;
   --success:#16A34A;--amber:#B45309;
 }
@@ -91,10 +91,10 @@ html,body{background:#F8F9FA;color:var(--text);font-family:'Inter',sans-serif;mi
 .domain-sec-badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;border-radius:20px;padding:4px 12px;margin-bottom:8px;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(0,212,212,0.25);}
 .domain-title{font-size:22px;font-weight:900;margin-bottom:5px;}
 .domain-meta{font-size:13px;color:var(--text-muted);}
-.framing-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:14px;color:var(--text-muted);line-height:1.7;}
-.sensitive-box{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:12px;padding:14px 16px;font-size:13px;color:#C4B5FD;line-height:1.7;margin-bottom:16px;}
-.crisis-box{background:var(--crisis-bg);border:2px solid var(--crisis-border);border-radius:12px;padding:16px 18px;font-size:14px;color:#FCA5A5;line-height:1.7;margin-bottom:16px;font-weight:600;}
-.crisis-num{font-size:20px;font-weight:900;color:#F87171;display:block;margin-bottom:3px;}
+.framing-box{background:#F8FAFF;border:1.5px solid #BFDBFE;border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:14px;color:#1E3A5F;line-height:1.7;}
+.sensitive-box{background:#FFFBEB;border:1.5px solid #F59E0B;border-radius:12px;padding:14px 16px;font-size:13px;color:#78350F;line-height:1.7;margin-bottom:16px;font-weight:500;}
+.crisis-box{background:#FFF5F5;border:2px solid #DC2626;border-radius:12px;padding:16px 18px;font-size:14px;color:#7F1D1D;line-height:1.7;margin-bottom:16px;font-weight:600;}
+.crisis-num{font-size:20px;font-weight:900;color:#DC2626;display:block;margin-bottom:3px;}
 .q-row{background:#FFFFFF;border:1.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
 .q-row-num{font-size:11px;color:var(--text-dim);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
 .q-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;}
@@ -144,8 +144,8 @@ html,body{background:#F8F9FA;color:var(--text);font-family:'Inter',sans-serif;mi
 .sev-severe{background:rgba(239,68,68,0.12);color:#FCA5A5;}
 .sev-very-severe{background:rgba(220,38,38,0.2);color:#F87171;}
 .items-ct{font-size:11px;color:var(--text-dim);}
-.flag-card{background:var(--crisis-bg);border:1px solid var(--crisis-border);border-radius:11px;padding:13px 15px;margin-bottom:8px;display:flex;gap:11px;}
-.flag-text{font-size:13px;color:#FCA5A5;font-weight:600;line-height:1.5;}
+.flag-card{background:#FFF5F5;border:1.5px solid #DC2626;border-radius:11px;padding:13px 15px;margin-bottom:8px;display:flex;gap:11px;}
+.flag-text{font-size:13px;color:#7F1D1D;font-weight:600;line-height:1.5;}
 .flag-sub{font-size:11px;color:var(--text-dim);margin-top:2px;}
 .burden-result{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:16px;margin-bottom:16px;}
 .report-usa-footer{text-align:center;padding:18px 0 8px;font-size:12px;color:var(--text-dim);border-top:1px solid var(--border);margin-top:18px;}
@@ -187,10 +187,10 @@ html,body{background:#F8F9FA;color:var(--text);font-family:'Inter',sans-serif;mi
 .modal-close{width:32px;height:32px;background:#F1F3F5;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-close:hover{border-color:var(--accent);color:var(--accent);}
 .modal-body{overflow-y:auto;padding:18px 20px 28px;flex:1;}
-.modal-mission{background:linear-gradient(135deg,rgba(0,212,212,0.08),rgba(0,212,212,0.03));border:1px solid rgba(0,212,212,0.2);border-radius:12px;padding:16px 18px;margin-bottom:18px;}
+.modal-mission{background:linear-gradient(135deg,#EFF6FF,#F0FDFF);border:1px solid #93C5FD;border-radius:12px;padding:16px 18px;margin-bottom:18px;}
 .modal-mission h3{font-size:14px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
 .modal-mission p{font-size:14px;color:var(--text-muted);line-height:1.75;}
-.modal-cl-entry{border-left:2px solid var(--border);padding-left:14px;margin-bottom:16px;}
+.modal-cl-entry{border-left:3px solid var(--accent);padding-left:14px;margin-bottom:16px;}
 .modal-cl-ver{font-size:12px;font-weight:800;color:var(--accent);margin-bottom:2px;}
 .modal-cl-date{font-size:10px;color:var(--text-dim);margin-bottom:6px;}
 .modal-cl-item{font-size:13px;color:var(--text-muted);line-height:1.6;padding-left:4px;}
@@ -256,7 +256,7 @@ html,body{background:#F8F9FA;color:var(--text);font-family:'Inter',sans-serif;mi
     <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     <div class="progress-lbl" id="progressLbl"></div>
   </div>
-  <span class="ver-chip" id="verChip" title="Click to view development log">v1.2.0-dev</span>
+  <span class="ver-chip" id="verChip" title="Click to view development log">v1.2.1-dev</span>
 </div>
 
 <!-- Logo slots: images live in HTML, JS reads innerHTML. No base64 in JS. -->
@@ -267,7 +267,7 @@ html,body{background:#F8F9FA;color:var(--text);font-family:'Inter',sans-serif;mi
 </div>
 <script>
 'use strict';
-var VERSION='1.2.0-dev';
+var VERSION='1.2.1-dev';
 var STORE='nros_p_v112_';
 
 var LOGO_LANDING = document.getElementById('logoSlotLanding').innerHTML;
@@ -961,7 +961,24 @@ function openDevLog(){
       '<div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Development History</div>'+
 
       '<div class="modal-cl-entry">'+
-        '<div class="modal-cl-ver">v1.1.5-dev \u2014 Current Build</div>'+
+        '<div class="modal-cl-ver">v1.2.1-dev \u2014 Current</div>'+
+        '<div class="modal-cl-date">2026-07-03</div>'+
+        '<div class="modal-cl-item">Fixed OCD / sensitive section box \u2014 amber on white (replaces dark purple)</div>'+
+        '<div class="modal-cl-item">Fixed crisis box, flag cards, framing boxes for light clinical theme</div>'+
+        '<div class="modal-cl-item">Dev log now auto-updates with every version release</div>'+
+      '</div>'+
+
+      '<div class="modal-cl-entry">'+
+        '<div class="modal-cl-ver">v1.2.0-dev</div>'+
+        '<div class="modal-cl-date">2026-07-03</div>'+
+        '<div class="modal-cl-item">Full clinical light theme: white backgrounds, dark text, grey borders</div>'+
+        '<div class="modal-cl-item">Diagnosis options updated per Lisa / Kurve review</div>'+
+        '<div class="modal-cl-item">Autism Spectrum Disorder \u2014 new intake card with checkboxes + gene chip entry</div>'+
+        '<div class="modal-cl-item">Tested-positive conditional question for Mold and Lyme diagnoses</div>'+
+      '</div>'+
+
+      '<div class="modal-cl-entry">'+
+        '<div class="modal-cl-ver">v1.1.5-dev</div>'+
         '<div class="modal-cl-date">2026-07-02</div>'+
         '<div class="modal-cl-item">Hi-res logo mark \u2014 Vitruvian Man / DNA helix / globe, ring and text removed</div>'+
         '<div class="modal-cl-item">Header redesigned to match beaconcr.com aesthetic</div>'+

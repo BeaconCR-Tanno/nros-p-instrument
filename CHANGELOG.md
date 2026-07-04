@@ -5,6 +5,26 @@ Format: [Version] — Date — Summary
 
 ---
 
+## [v1.2.1-dev] — 2026-07-03
+
+### Fixed — Light Theme Color Pass
+- **OCD / sensitive section box:** Replaced dark purple background (`#FAF5FF` + purple border + `#C4B5FD` text) with amber/yellow clinical advisory style (`#FFFBEB` + `#F59E0B` border + `#78350F` dark text). Purple was unreadable on the new white background.
+- **Crisis box (988 section):** Text color corrected from light pink `#FCA5A5` (dark-theme color) to dark red `#7F1D1D` — high contrast on white.
+- **Framing box:** Switched to light blue `#F8FAFF` background with blue border — clearly advisory without feeling alarming.
+- **Flag cards in report:** Same red fix — dark red text on light red background.
+- **Crisis number (988):** Corrected to dark red `#DC2626`.
+- **Modal:** Mission + changelog section updated to light theme colors.
+
+### Process
+- **Dev log auto-update:** Dev log modal inside the app now updated with every version bump. The `v2026` chip in the header always reflects the most recent changes.
+
+### Infrastructure
+- Commit: `pending` — main branch
+- Syntax: `node --check` clean
+
+---
+
+
 ## [v1.1.6-dev] — 2026-07-02
 
 ### Added — Dev Log Modal + Feedback Boxes
