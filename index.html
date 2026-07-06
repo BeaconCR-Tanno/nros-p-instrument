@@ -209,6 +209,15 @@ html,body{background:#F8F9FA;color:var(--text);font-family:'Inter',sans-serif;mi
 .feedback-textarea::placeholder{color:var(--text-dim);}
 .skip-reason-box{display:none;}
 
+/* ── Diagnosis Multi-Select ──────────────────────────────────────────── */
+.dx-cb-row{display:flex;align-items:center;gap:12px;padding:10px 4px;cursor:pointer;border-radius:8px;}
+.dx-cb-row:hover{background:rgba(255,255,255,0.04);}
+.dx-cb-label{font-size:15px;color:var(--text);cursor:pointer;user-select:none;}
+.dx-other-wrap{margin-top:8px;padding-left:38px;}
+.dx-other-wrap input{margin-top:0;}
+/* ── INIG Pills ──────────────────────────────────────────────────────── */
+.inig-pill{transition:all 0.15s;}
+.assess-type-card{transition:border-color 0.2s;}
 /* ── Autism Section ──────────────────────────────────────────────────── */
 .autism-card{background:#F8F9FA;border:2px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;}
 .autism-card-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;cursor:pointer;user-select:none;}
@@ -256,7 +265,7 @@ html,body{background:#F8F9FA;color:var(--text);font-family:'Inter',sans-serif;mi
     <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     <div class="progress-lbl" id="progressLbl"></div>
   </div>
-  <span class="ver-chip" id="verChip" title="Click to view development log">v1.2.1-dev</span>
+  <span class="ver-chip" id="verChip" title="Click to view development log">v1.3.0-dev</span>
 </div>
 
 <!-- Logo slots: images live in HTML, JS reads innerHTML. No base64 in JS. -->
@@ -267,7 +276,7 @@ html,body{background:#F8F9FA;color:var(--text);font-family:'Inter',sans-serif;mi
 </div>
 <script>
 'use strict';
-var VERSION='1.2.1-dev';
+var VERSION='1.3.0-dev';
 var STORE='nros_p_v112_';
 
 var LOGO_LANDING = document.getElementById('logoSlotLanding').innerHTML;
@@ -308,24 +317,26 @@ var SCREENS=[];
 SCREENS.push({t:'landing'});
 SCREENS.push({t:'reg'});
 SCREENS.push({t:'flare'});
+SCREENS.push({t:'assesstype'});
 SEC.forEach(function(s){SCREENS.push({t:'domain',sec:s});});
 SCREENS.push({t:'burden'});
+SCREENS.push({t:'inig'});
 SCREENS.push({t:'review'});
 SCREENS.push({t:'completion'});
 SCREENS.push({t:'report'});
 var RI=SCREENS.length-1;
 
-var cur=0,R={},B={},reg={},fla={},sid='',cat='',con=false,rv=false,rvSec='',skipReason='',suggestion='',autismDx=false,autismFlags={vaccine:false,regressive:false,genetic:false},autismGenes=[];
+var cur=0,R={},B={},reg={},fla={},sid='',cat='',con=false,rv=false,rvSec='',skipReason='',suggestion='',autismDx=false,autismFlags={vaccine:false,regressive:false,genetic:false},autismGenes=[],selectedDiagnoses=[],otherDiagnosis='',assessType='',inigData={};
 
-function sv(){try{localStorage.setItem(STORE+'c',cur);localStorage.setItem(STORE+'r',JSON.stringify(R));localStorage.setItem(STORE+'b',JSON.stringify(B));localStorage.setItem(STORE+'g',JSON.stringify(reg));localStorage.setItem(STORE+'f',JSON.stringify(fla));localStorage.setItem(STORE+'s',sid);localStorage.setItem(STORE+'t',cat);localStorage.setItem(STORE+'rv',rv?'1':'');localStorage.setItem(STORE+'sr',skipReason);localStorage.setItem(STORE+'sg',suggestion);localStorage.setItem(STORE+'ax',JSON.stringify({autismDx:autismDx,autismFlags:autismFlags,autismGenes:autismGenes}));}catch(e){}}
-function ld(){try{var c=localStorage.getItem(STORE+'c');if(c!==null)cur=parseInt(c,10);var r=localStorage.getItem(STORE+'r');if(r)R=JSON.parse(r);var b=localStorage.getItem(STORE+'b');if(b)B=JSON.parse(b);var g=localStorage.getItem(STORE+'g');if(g){reg=JSON.parse(g);con=true;}var f=localStorage.getItem(STORE+'f');if(f)fla=JSON.parse(f);var s=localStorage.getItem(STORE+'s');if(s)sid=s;var t=localStorage.getItem(STORE+'t');if(t)cat=t;var rv2=localStorage.getItem(STORE+'rv');if(rv2)rv=true;var sr=localStorage.getItem(STORE+'sr');if(sr)skipReason=sr;var sg=localStorage.getItem(STORE+'sg');if(sg)suggestion=sg;var ax=localStorage.getItem(STORE+'ax');if(ax){var axd=JSON.parse(ax);autismDx=axd.autismDx||false;autismFlags=axd.autismFlags||{vaccine:false,regressive:false,genetic:false};autismGenes=axd.autismGenes||[];}}catch(e){}}
-function cl(){rv=false;rvSec='';skipReason='';suggestion='';autismDx=false;autismFlags={vaccine:false,regressive:false,genetic:false};autismGenes=[];['c','r','b','g','f','s','t','rv','sr','sg','ax'].forEach(function(k){localStorage.removeItem(STORE+k);});cur=0;R={};B={};reg={};fla={};sid='';cat='';con=false;}
+function sv(){try{localStorage.setItem(STORE+'c',cur);localStorage.setItem(STORE+'r',JSON.stringify(R));localStorage.setItem(STORE+'b',JSON.stringify(B));localStorage.setItem(STORE+'g',JSON.stringify(reg));localStorage.setItem(STORE+'f',JSON.stringify(fla));localStorage.setItem(STORE+'s',sid);localStorage.setItem(STORE+'t',cat);localStorage.setItem(STORE+'rv',rv?'1':'');localStorage.setItem(STORE+'sr',skipReason);localStorage.setItem(STORE+'sg',suggestion);localStorage.setItem(STORE+'ax',JSON.stringify({autismDx:autismDx,autismFlags:autismFlags,autismGenes:autismGenes}));localStorage.setItem(STORE+'sdx',JSON.stringify(selectedDiagnoses));localStorage.setItem(STORE+'odx',otherDiagnosis);localStorage.setItem(STORE+'at',assessType);localStorage.setItem(STORE+'inig',JSON.stringify(inigData));}catch(e){}}
+function ld(){try{var c=localStorage.getItem(STORE+'c');if(c!==null)cur=parseInt(c,10);var r=localStorage.getItem(STORE+'r');if(r)R=JSON.parse(r);var b=localStorage.getItem(STORE+'b');if(b)B=JSON.parse(b);var g=localStorage.getItem(STORE+'g');if(g){reg=JSON.parse(g);con=true;}var f=localStorage.getItem(STORE+'f');if(f)fla=JSON.parse(f);var s=localStorage.getItem(STORE+'s');if(s)sid=s;var t=localStorage.getItem(STORE+'t');if(t)cat=t;var rv2=localStorage.getItem(STORE+'rv');if(rv2)rv=true;var sr=localStorage.getItem(STORE+'sr');if(sr)skipReason=sr;var sg=localStorage.getItem(STORE+'sg');if(sg)suggestion=sg;var ax=localStorage.getItem(STORE+'ax');if(ax){var axd=JSON.parse(ax);autismDx=axd.autismDx||false;autismFlags=axd.autismFlags||{vaccine:false,regressive:false,genetic:false};autismGenes=axd.autismGenes||[];}var sdx=localStorage.getItem(STORE+'sdx');if(sdx)selectedDiagnoses=JSON.parse(sdx);var odx=localStorage.getItem(STORE+'odx');if(odx)otherDiagnosis=odx;var aat=localStorage.getItem(STORE+'at');if(aat)assessType=aat;var iig=localStorage.getItem(STORE+'inig');if(iig)inigData=JSON.parse(iig);}catch(e){}}
+function cl(){rv=false;rvSec='';skipReason='';suggestion='';autismDx=false;autismFlags={vaccine:false,regressive:false,genetic:false};autismGenes=[];['c','r','b','g','f','s','t','rv','sr','sg','ax','sdx','odx','at','inig'].forEach(function(k){localStorage.removeItem(STORE+k);});selectedDiagnoses=[];otherDiagnosis='';assessType='';inigData={};cur=0;R={};B={};reg={};fla={};sid='';cat='';con=false;}
 function gs(){return 'NP-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,7).toUpperCase();}
 
 function up(){
   var pw=document.getElementById('progressWrap'),pf=document.getElementById('progressFill'),pl=document.getElementById('progressLbl');
   var t=SCREENS[cur].t;
-  if(['landing','reg','flare','completion','review','report'].indexOf(t)>=0){if(pw)pw.style.display='none';return;}
+  if(['landing','reg','flare','assesstype','inig','completion','review','report'].indexOf(t)>=0){if(pw)pw.style.display='none';return;}
   if(pw)pw.style.display='block';
   var di=0;
   if(t==='domain'){for(var i=3;i<cur;i++)if(SCREENS[i].t==='domain')di++;}
@@ -343,8 +354,10 @@ function render(){
   if(t==='landing')rLand(app);
   else if(t==='reg')rReg(app);
   else if(t==='flare')rFlare(app);
+  else if(t==='assesstype')rAssessType(app);
   else if(t==='domain')rDom(app,scr.sec);
   else if(t==='burden')rBur(app);
+  else if(t==='inig')rInig(app);
   else if(t==='completion')rComp(app);
   else if(t==='review')rReview(app);
   else if(t==='report')rRep(app);
@@ -386,7 +399,7 @@ function rLand(app){
 function rReg(app){
   var r=reg;
   var rels=['Parent (Mother)','Parent (Father)','Grandparent','Legal Guardian','Therapist','Teacher','Other Caregiver'];
-  var dxs=['PANS / PANDAS','Mold / MARCoNS / Mycotoxin Infection','Lyme Disease','Primary Immune Deficiency','Specific Antibody Deficiency','Autism Spectrum Disorder','Other neuroimmune condition','Undiagnosed / Under evaluation'];
+  var DX_OPTIONS=['Primary Immune Deficiency','Specific Antibody Deficiency','PANS / PANDAS','Mold / MARCoNS / Mycotoxin Infection','Lyme Disease','Vaccine Injured','Regressive Autism','Formal Autism Diagnosis','Confirmed Autism Genetic Profile','Other'];
   app.innerHTML='<div class="screen">'+
     '<div class="page-title">Caregiver Registration</div>'+
     '<div class="page-sub">Please enter information about yourself and the child you are assessing. All data stays on your device.</div>'+
@@ -402,20 +415,11 @@ function rReg(app){
     '</div>'+
     '<div class="form-section"><div class="form-section-title">About the Child</div>'+
       '<div class="form-row"><label class="form-label">Child\u2019s First Name *</label><input class="form-input" id="fc" value="'+(r.childName||'')+'" placeholder="First name only"></div>'+
-      '<div class="form-row form-row-2">'+
-        '<div><label class="form-label">Age *</label><input class="form-input" id="fa" type="number" min="2" max="25" value="'+(r.childAge||'')+'" placeholder="Age"></div>'+
-        '<div><label class="form-label">Diagnosis *</label>'+
-          '<select class="form-select" id="fd"><option value="">\u2014 Select \u2014</option>'+
-          dxs.map(function(o){return '<option'+(r.diagnosis===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'+
-      '</div>'+
+      '<div class="form-row">'+'<label class="form-label">Age *</label><input class="form-input" id="fa" type="number" min="2" max="25" value="'+(r.childAge||'')+'" placeholder="Age">'+'</div>'+
+      '<div class="form-row form-section">'+'<div class="form-section-title">Diagnoses * <span style="font-size:11px;font-weight:400;color:var(--text-dim)">(select all that apply)</span></div>'+DX_OPTIONS.map(function(o){var checked=selectedDiagnoses.indexOf(o)>=0;return '<div class="dx-cb-row" data-dx="'+o+'">'+'<div class="autism-cb'+(checked?' checked':'')+' dx-cb" id="dxcb_'+o.replace(/[^a-zA-Z]/g,'_')+'"></div>'+'<div class="autism-cb-label dx-cb-label">'+o+'</div>'+'</div>';}).join('')+'<div class="dx-other-wrap" id="dxOtherWrap" style="display:'+(selectedDiagnoses.indexOf('Other')>=0?'block':'none')+'">'+'<input class="form-input" id="dxOtherInput" placeholder="Please describe the diagnosis" value="'+(otherDiagnosis||'')+'"></div>'+'</div>'+
+
     '</div>'+
-    '<div class="form-section" id="testedWrap" style="display:none">'+
-      '<div class="form-section-title">Intake Confirmation</div>'+
-      '<div class="form-row"><label class="form-label" id="testedLbl">Has the child tested positive for this condition at intake?</label>'+
-        '<select class="form-select" id="fTested"><option value="">\u2014 Select \u2014</option>'+
-        ['Yes','No','Unknown / Not tested'].map(function(o){return '<option'+(r.testedPositive===o?' selected':'')+'>'+o+'</option>';}).join('')+
-        '</select></div>'+
-    '</div>'+
+    
     '<div class="autism-card" id="autismCard" style="display:none">'+
       '<div class="autism-card-header" id="autismHdr">'+
         '<div class="autism-toggle" id="autismTog"></div>'+
@@ -455,13 +459,26 @@ function rReg(app){
   document.getElementById('btnCont').addEventListener('click',subReg);
   document.getElementById('navBack').addEventListener('click',goBack);
   document.getElementById('navNext').addEventListener('click',subReg);
-  document.getElementById('fd').addEventListener('change',function(){
-    var v=this.value,tw=document.getElementById('testedWrap'),ac=document.getElementById('autismCard');
-    var tested=['Mold / MARCoNS / Mycotoxin Infection','Lyme Disease'];
-    if(tw)tw.style.display=(tested.indexOf(v)>=0)?'block':'none';
-    if(ac)ac.style.display=(v==='Autism Spectrum Disorder')?'block':'none';
+  // Multi-select diagnosis checkboxes
+  document.querySelectorAll('.dx-cb-row').forEach(function(row){
+    row.addEventListener('click',function(){
+      var dx=row.getAttribute('data-dx');
+      var cb=row.querySelector('.dx-cb');
+      var idx=selectedDiagnoses.indexOf(dx);
+      if(idx>=0){selectedDiagnoses.splice(idx,1);cb.className='autism-cb dx-cb';}
+      else{selectedDiagnoses.push(dx);cb.className='autism-cb dx-cb checked';}
+      var otherWrap=document.getElementById('dxOtherWrap');
+      if(otherWrap)otherWrap.style.display=selectedDiagnoses.indexOf('Other')>=0?'block':'none';
+      // Show autism card if Formal Autism Diagnosis selected
+      var ac=document.getElementById('autismCard');
+      if(ac)ac.style.display=selectedDiagnoses.indexOf('Formal Autism Diagnosis')>=0?'block':'none';
+      sv();
+    });
   });
-  (function(){var fd=document.getElementById('fd');if(fd)fd.dispatchEvent(new Event('change'));})();
+  var dxOtherInput=document.getElementById('dxOtherInput');
+  if(dxOtherInput)dxOtherInput.addEventListener('input',function(){otherDiagnosis=this.value;sv();});
+  // Restore autism card visibility
+  (function(){var ac=document.getElementById('autismCard');if(ac)ac.style.display=selectedDiagnoses.indexOf('Formal Autism Diagnosis')>=0?'block':'none';})();
   document.getElementById('autismHdr').addEventListener('click',function(){
     autismDx=!autismDx;
     document.getElementById('autismTog').className='autism-toggle'+(autismDx?' checked':'');
@@ -520,7 +537,7 @@ function subReg(){
   var fn=document.getElementById('ff').value.trim(),ln=document.getElementById('fl').value.trim(),
       rl=document.getElementById('fr').value,em=document.getElementById('fe').value.trim(),
       cn=document.getElementById('fc').value.trim(),ag=document.getElementById('fa').value,
-      dx=document.getElementById('fd').value,err=document.getElementById('re');
+      err=document.getElementById('re');
   function e(m){err.textContent=m;err.style.display='block';}
   err.style.display='none';
   if(!fn){e('Please enter your first name.');return;}
@@ -528,10 +545,10 @@ function subReg(){
   if(!rl){e('Please select your relationship.');return;}
   if(!cn){e('Please enter the child\u2019s first name.');return;}
   if(!ag){e('Please enter the child\u2019s age.');return;}
-  if(!dx){e('Please select a diagnosis.');return;}
+  if(!selectedDiagnoses.length){e('Please select at least one diagnosis.');return;}
   if(!con){e('Please check the consent box to continue.');return;}
-  var ts=document.getElementById('fTested');var tp=ts?ts.value:null;
-  reg={firstName:fn,lastName:ln,relationship:rl,email:em,childName:cn,childAge:parseInt(ag,10),diagnosis:dx,testedPositive:tp||null,autismDiagnosis:autismDx,autismFlags:autismDx?autismFlags:null,autismGenes:autismDx&&autismFlags.genetic&&autismGenes.length?autismGenes:null,consentAt:new Date().toISOString()};
+
+  reg={firstName:fn,lastName:ln,relationship:rl,email:em,childName:cn,childAge:parseInt(ag,10),diagnoses:selectedDiagnoses.slice(),otherDiagnosis:otherDiagnosis||null,autismDiagnosis:autismDx,autismFlags:autismDx?autismFlags:null,autismGenes:autismDx&&autismFlags.genetic&&autismGenes.length?autismGenes:null,consentAt:new Date().toISOString()};
   if(!sid)sid=gs();
   sv();goNext();
 }
@@ -872,7 +889,7 @@ function rRep(app){
       '<div class="report-meta">'+
         '<div class="rmi"><div class="rml">Child</div><div class="rmv">'+(reg.childName||'\u2014')+'</div></div>'+
         '<div class="rmi"><div class="rml">Age</div><div class="rmv">'+(reg.childAge||'\u2014')+'</div></div>'+
-        '<div class="rmi"><div class="rml">Diagnosis</div><div class="rmv" style="font-size:12px">'+(reg.diagnosis||'\u2014')+'</div></div>'+
+        '<div class="rmi"><div class="rml">Diagnoses</div><div class="rmv" style="font-size:12px">'+(reg.diagnoses&&reg.diagnoses.length?reg.diagnoses.join(', '):'\u2014')+'</div></div>'+
         '<div class="rmi"><div class="rml">Assessment</div><div class="rmv">'+(fla.status?fla.status.charAt(0).toUpperCase()+fla.status.slice(1):'\u2014')+'</div></div>'+
         '<div class="rmi"><div class="rml">Trigger</div><div class="rmv" style="font-size:11px">'+(fla.trigger||'Not specified')+'</div></div>'+
         '<div class="rmi"><div class="rml">Reported By</div><div class="rmv" style="font-size:12px">'+(reg.relationship||'\u2014')+'</div></div>'+
@@ -928,6 +945,136 @@ function nav(back){
     (back?'<button class="nav-back" id="navBack">&larr; Back</button>':'')+
     '<button class="nav-next" id="navNext">Next &rarr;</button></div>';
 }
+
+// ── Assessment Type Selection ───────────────────────────────────────────────
+function rAssessType(app){
+  var opts=[
+    {v:'pre',label:'PRE-INIG ASSESSMENT',desc:'Baseline status before starting INIG treatment',icon:'\u2B50'},
+    {v:'post',label:'POST-INIG ASSESSMENT',desc:'Tracking changes and improvements after INIG',icon:'\u2705'}
+  ];
+  app.innerHTML='<div class="screen">'+
+    '<div class="page-title" style="font-size:22px;letter-spacing:1px">Assessment Type</div>'+
+    '<div class="page-sub">Which assessment are you completing today?</div>'+
+    '<div style="margin:28px 0 0 0">'+
+    opts.map(function(o){
+      var sel=(assessType===o.v);
+      return '<div class="assess-type-card'+(sel?' selected':'')+'" data-val="'+o.v+'" style="background:var(--card);border:3px solid '+(sel?'var(--accent)':'var(--border)')+';border-radius:16px;padding:24px 20px;margin-bottom:16px;cursor:pointer;">'+
+        '<div style="font-size:28px;font-weight:900;letter-spacing:2px;color:'+(sel?'var(--accent)':'var(--text-dim)')+';margin-bottom:8px">'+o.icon+' '+o.label+'</div>'+
+        '<div style="font-size:15px;color:var(--text-dim)">'+o.desc+'</div>'+
+      '</div>';
+    }).join('')+
+    '</div>'+
+    '<div class="reg-error" id="atErr" style="display:none;color:#f87171;margin-top:12px;font-size:14px">Please select an assessment type.</div>'+
+  '</div>'+nav(true);
+  document.getElementById('app').addEventListener('click',function atClick(e){
+    var card=e.target.closest('.assess-type-card');
+    if(!card)return;
+    assessType=card.getAttribute('data-val');
+    sv();
+    // re-render to show selection
+    document.querySelectorAll('.assess-type-card').forEach(function(c){
+      var isSelected=(c.getAttribute('data-val')===assessType);
+      c.style.border='3px solid '+(isSelected?'var(--accent)':'var(--border)');
+      c.querySelector('div').style.color=isSelected?'var(--accent)':'var(--text-dim)';
+      c.className='assess-type-card'+(isSelected?' selected':'');
+    });
+  });
+  document.getElementById('navBack').addEventListener('click',goBack);
+  document.getElementById('navNext').addEventListener('click',function(){
+    if(!assessType){document.getElementById('atErr').style.display='block';return;}
+    goNext();
+  });
+}
+
+// ── Post-INIG Assessment Screen ─────────────────────────────────────────────
+function rInig(app){
+  var d=inigData;
+  var IMPROVE_OPTS=['Improved','No change','Worsened','Not applicable','Unknown'];
+  var DOMAINS_INIG=[
+    {k:'sleep',label:'Sleep'},
+    {k:'seizures',label:'Seizures / Epilepsy'},
+    {k:'communication',label:'Communication'},
+    {k:'motor',label:'Motor Function'},
+    {k:'cognition',label:'Cognition / Awareness'},
+    {k:'behavior',label:'Behavior / Emotional Regulation'},
+    {k:'immune',label:'Immune Symptoms'},
+    {k:'inflammation',label:'Inflammation-Related Symptoms'},
+    {k:'gi',label:'GI / Gut Symptoms'},
+    {k:'anxiety',label:'Anxiety'},
+    {k:'ocd',label:'OCD / Repetitive Behaviors'},
+    {k:'sensory',label:'Sensory Sensitivities'}
+  ];
+  function pill(key,val){
+    var sel=(d['imp_'+key]===val);
+    return '<span class="inig-pill'+(sel?' selected':'')+'" data-key="'+key+'" data-val="'+val+'" style="display:inline-block;margin:4px 4px 4px 0;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;border:2px solid '+(sel?'var(--accent)':'var(--border)')+';background:'+(sel?'rgba(0,212,212,0.18)':'var(--card)')+';color:'+(sel?'var(--accent)':'var(--text-dim)')+'">'+val+'</span>';
+  }
+  var html='<div class="screen">'+
+    '<div style="background:rgba(0,212,212,0.10);border:3px solid var(--accent);border-radius:14px;padding:20px;margin-bottom:24px;text-align:center">'+
+      '<div style="font-size:26px;font-weight:900;color:var(--accent);letter-spacing:2px">\u2705 POST-INIG ASSESSMENT</div>'+
+      '<div style="font-size:13px;color:var(--text-dim);margin-top:6px">Tracking changes and improvements after INIG treatment</div>'+
+    '</div>'+
+    '<div class="form-section"><div class="form-section-title">INIG Treatment Timeline</div>'+
+      '<div class="form-row"><label class="form-label">Start date of INIG (approximate)</label>'+
+        '<input class="form-input" id="inigStart" type="date" value="'+(d.startDate||'')+'"></div>'+
+      '<div class="form-row form-row-2">'+
+        '<div><label class="form-label">Weeks using INIG</label><input class="form-input" id="inigWeeks" type="number" min="0" value="'+(d.weeks||'')+'" placeholder="0"></div>'+
+        '<div><label class="form-label">Months using INIG</label><input class="form-input" id="inigMonths" type="number" min="0" value="'+(d.months||'')+'" placeholder="0"></div>'+
+      '</div>'+
+      '<div class="form-row"><label class="form-label">Current dosing schedule (optional)</label>'+
+        '<input class="form-input" id="inigDose" placeholder="e.g. 1g/kg every 4 weeks" value="'+(d.dosing||'')+'"></div>'+
+      '<div class="form-row"><label class="form-label">Still currently using INIG?</label>'+
+        '<div style="display:flex;gap:12px;margin-top:8px">'+
+        ['Yes','No'].map(function(v){var sel=(d.stillUsing===v);return '<div class="flare-option'+(sel?' selected':'')+'" data-su="'+v+'" style="flex:1;padding:12px;border-radius:10px;border:2px solid '+(sel?'var(--accent)':'var(--border)')+';cursor:pointer;text-align:center;font-weight:700">'+v+'</div>';}).join('')+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="form-section"><div class="form-section-title">Overall Improvement</div>'+
+      '<div class="form-row"><label class="form-label">Has there been improvement since starting INIG?</label>'+
+        '<select class="form-select" id="inigOverall"><option value="">— Select —</option>'+
+        ['Yes, significant improvement','Yes, some improvement','No noticeable change','Condition worsened','Too early to tell'].map(function(o){return '<option'+(d.overall===o?' selected':'')+'>'+o+'</option>';}).join('')+
+        '</select></div>'+
+      '<div class="form-row"><label class="form-label">Parent / Caregiver description of observed improvements</label>'+
+        '<textarea class="form-input" id="inigImprovDesc" rows="4" placeholder="Describe in your own words what you have observed...">'+(d.improvDesc||'')+'</textarea></div>'+
+      '<div class="form-row"><label class="form-label">Any new symptoms after starting INIG?</label>'+
+        '<textarea class="form-input" id="inigNewSymptoms" rows="3" placeholder="List any new symptoms that appeared after starting INIG...">'+(d.newSymptoms||'')+'</textarea></div>'+
+    '</div>'+
+    '<div class="form-section"><div class="form-section-title">Domain-by-Domain Changes</div>'+
+      '<div style="font-size:13px;color:var(--text-dim);margin-bottom:14px">For each area, select how it changed since starting INIG. Add notes if helpful.</div>'+
+    DOMAINS_INIG.map(function(dom){
+      return '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px">'+
+        '<div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:8px">'+dom.label+'</div>'+
+        '<div class="inig-pills" data-domain="'+dom.k+'">'+
+          IMPROVE_OPTS.map(function(v){return pill(dom.k,v);}).join('')+
+        '</div>'+
+        '<input class="form-input inig-notes" data-notes="'+dom.k+'" placeholder="Notes (optional)" value="'+(d['notes_'+dom.k]||'')+'" style="margin-top:8px;font-size:13px">'+
+      '</div>';
+    }).join('')+
+    '</div>'+
+  '</div>'+nav(true);
+  app.innerHTML=html;
+  // Event wiring
+  app.addEventListener('click',function(e){
+    // Still using INIG
+    var su=e.target.closest('[data-su]');
+    if(su){inigData.stillUsing=su.getAttribute('data-su');sv();app.querySelectorAll('[data-su]').forEach(function(el){var isSel=(el.getAttribute('data-su')===inigData.stillUsing);el.style.border='2px solid '+(isSel?'var(--accent)':'var(--border)');el.className='flare-option'+(isSel?' selected':'');});return;}
+    // Improvement pills
+    var pill=e.target.closest('.inig-pill');
+    if(pill){var k=pill.getAttribute('data-key'),v=pill.getAttribute('data-val');inigData['imp_'+k]=v;sv();app.querySelectorAll('[data-key="'+k+'"]').forEach(function(p){var s=(p.getAttribute('data-val')===v);p.className='inig-pill'+(s?' selected':'');p.style.border='2px solid '+(s?'var(--accent)':'var(--border)');p.style.background=s?'rgba(0,212,212,0.18)':'var(--card)';p.style.color=s?'var(--accent)':'var(--text-dim)';});}
+  });
+  app.addEventListener('input',function(e){
+    if(e.target.id==='inigStart'){inigData.startDate=e.target.value;sv();}
+    else if(e.target.id==='inigWeeks'){inigData.weeks=parseInt(e.target.value)||0;sv();}
+    else if(e.target.id==='inigMonths'){inigData.months=parseInt(e.target.value)||0;sv();}
+    else if(e.target.id==='inigDose'){inigData.dosing=e.target.value;sv();}
+    else if(e.target.id==='inigOverall'){inigData.overall=e.target.value;sv();}
+    else if(e.target.id==='inigImprovDesc'){inigData.improvDesc=e.target.value;sv();}
+    else if(e.target.id==='inigNewSymptoms'){inigData.newSymptoms=e.target.value;sv();}
+    else if(e.target.classList.contains('inig-notes')){inigData['notes_'+e.target.getAttribute('data-notes')]=e.target.value;sv();}
+  });
+  document.getElementById('navBack').addEventListener('click',goBack);
+  document.getElementById('navNext').addEventListener('click',goNext);
+}
+
 function goNext(){if(cur<SCREENS.length-1){cur++;sv();render();}}
 function goBack(){if(cur>0){cur--;sv();render();}}
 
