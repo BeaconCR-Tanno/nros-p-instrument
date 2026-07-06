@@ -5,6 +5,40 @@ Format: [Version] — Date — Summary
 
 ---
 
+## [v1.3.0-dev] — 2026-07-06
+
+### Revision Request — Lisa / Kurve (logged 2026-07-06)
+**Requester:** Lisa, Business Coordinator at Kurve
+**Log file:** `TANNO_CORE/documents/REVISION_REQUEST_LISA_v1.3.0.md`
+
+### Added — Multi-Select Diagnosis
+- **Old:** Single dropdown, one diagnosis at a time
+- **New:** Checkbox list — select all that apply
+- **Options:** Primary Immune Deficiency, Specific Antibody Deficiency, PANS/PANDAS, Mold/MARCoNS/Mycotoxin Infection, Lyme Disease, Vaccine Injured, Regressive Autism, Formal Autism Diagnosis, Confirmed Autism Genetic Profile, Other (with free-text field)
+- Formal Autism Diagnosis checkbox still reveals the expanded autism card with Vaccine Injured / Regressive / Genetic Profile / gene chip entry
+
+### Added — Pre/Post-INIG Assessment Structure
+- **New screen:** Assessment Type selector after Flare gate
+- **PRE-INIG ASSESSMENT** — large bold amber header on all domain screens
+- **POST-INIG ASSESSMENT** — large bold teal header on all domain screens
+
+### Added — Post-INIG Screen
+New `rInig()` screen inserted before Review, collects:
+- INIG start date, weeks/months using, dosing schedule, still using Y/N
+- Overall improvement (dropdown)
+- Caregiver narrative description of improvements
+- Any new symptoms (free-text)
+- Domain-by-domain change tracking with pills: **Improved / No change / Worsened / Not applicable / Unknown**
+  - Domains: Sleep, Seizures, Communication, Motor, Cognition, Behavior, Immune, Inflammation, GI, Anxiety, OCD, Sensory
+- Optional notes per domain
+
+### Infrastructure
+- Commit: `f247203` — main branch
+- Syntax: `node --check` clean
+- Deploy: 200 OK, 451KB, https://nros-p-dev.beaconcr.com
+
+---
+
 ## [v1.2.1-dev] — 2026-07-03
 
 ### Fixed — Light Theme Color Pass
