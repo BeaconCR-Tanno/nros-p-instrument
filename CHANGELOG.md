@@ -5,6 +5,28 @@ Format: [Version] — Date — Summary
 
 ---
 
+## [v1.3.1-dev] — 2026-07-06
+
+### Revised — Opening Screen Professionalization
+- Opening screen redesigned toward a black / white / grey clinical presentation with restrained Beacon green highlights.
+- Removed the large front-page Beacon man / globe art from the landing screen; landing now opens with typography and a concise clinical positioning statement.
+- Replaced colorful red/blue/cyan NROS-P hero styling with black/white/grey text and Beacon green only on the specialty `P` highlight.
+- Removed decorative star row from landing/header presentation.
+- Subscale chips changed from blue badges to neutral grey clinical chips.
+- Development preview notice changed to black/grey with a narrow Beacon green accent bar.
+
+### Revised — Logo Asset
+- Embedded Adrian-uploaded Beacon logo as the current correct logo source.
+- Optimized uploaded 1254×1254 JPG into `assets/beacon-logo-correct-2026-07-06.webp` for lower file weight.
+- Updated hidden HTML logo slots used by header/report; kept logo asset out of JavaScript to preserve parser stability.
+
+### Development Report
+- Report written: `TANNO_CORE/documents/NROS_P_v1.3.1_OPENING_SCREEN_BRAND_REVISION.md`
+- Patcher: `C:/Users/robbe/AppData/Local/Temp/patch_nrosp_v131_brand_landing.py`
+- Syntax: `node --check` clean
+
+---
+
 ## [v1.3.0-dev] — 2026-07-06
 
 ### Revision Request — Lisa / Kurve (logged 2026-07-06)
