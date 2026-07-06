@@ -5,6 +5,27 @@ Format: [Version] — Date — Summary
 
 ---
 
+## [v1.3.2-dev] — 2026-07-06
+
+### Revised — Professional Light Theme Pass
+- Application-wide color cleanup across registration, flare/current status, assessment type, domain pages, INIG screen, caregiver burden, review, completion, and report.
+- Neutralized remaining teal/cyan/blue/purple UI accents into a black / white / grey clinical system.
+- Preserved the v1.3.1 front page exactly as requested.
+- Preserved colored reported-outcome answer buttons and severity indicators for clinical interpretation.
+- Converted domain headers, framing boxes, review/edit bars, completion state, and navigation buttons to neutral professional styling.
+
+### Revised — Report Page
+- Report header updated to white/grey card with black left rule and corrected Beacon logo treatment.
+- Report metadata cards, disclaimer, buttons, attribution links, and caregiver burden result aligned to the professional black/white/grey system.
+- Corrected Beacon logo remains embedded via HTML slot pattern; no base64 in JavaScript.
+
+### Development Report
+- Report written: `TANNO_CORE/documents/NROS_P_v1.3.2_PROFESSIONAL_THEME_REVISION.md`
+- Patcher: `C:/Users/robbe/AppData/Local/Temp/patch_nrosp_v132_professional_theme.py`
+- Syntax: `node --check` clean
+
+---
+
 ## [v1.3.1-dev] — 2026-07-06
 
 ### Revised — Opening Screen Professionalization
